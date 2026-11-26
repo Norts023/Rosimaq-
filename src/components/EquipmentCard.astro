@@ -1,42 +1,51 @@
 ---
 import { Picture } from 'astro:assets';
 import { getCategoryLabel, type Equipment } from '../data/equipment';
-import { photoFor } from '../lib/photos';
+import { findPhoto } from '../lib/photos';
+import { normalize } from '../lib/catalog';
 import { buildWhatsAppLink, equipmentMessage } from '../lib/whatsapp';
 import Icon from './Icon.astro';
 
 interface Props {
   item: Equipment;
   eager?: boolean;
-  /** Mostra a categoria acima do nome. */
   showCategory?: boolean;
 }
 const { item, eager = false, showCategory = true } = Astro.props;
-const photo = photoFor(item.photoFile);
+const photo = findPhoto(item.photoFile);
 const whatsapp = buildWhatsAppLink(equipmentMessage(item.name));
+const searchText = normalize([item.name, item.description, ...item.specs].join(' '));
 ---
 
 <article
-  class="group relative flex flex-col overflow-hidden rounded-[12px] border border-ink-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,.35)] focus-within:-translate-y-1"
-  id={item.id}
+  class="group relative flex h-full flex-col overflow-hidden rounded-[12px] border border-ink-200 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_40px_-20px_rgba(0,0,0,.35)] focus-within:-translate-y-1"
+  id={`card-${item.id}`}
   data-equipment-card
+  data-category={item.category}
+  data-text={searchText}
 >
   <span
     class="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-brand-500 transition-transform duration-300 group-hover:scale-x-100"
     aria-hidden="true"
   ></span>
   <div class="aspect-[4/3] overflow-hidden bg-white p-4">
-    <Picture
-      src={photo}
-      formats={['avif', 'webp']}
-      alt={item.name}
-      widths={[320, 480, 640]}
-      sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
-      loading={eager ? 'eager' : 'lazy'}
-      fetchpriority={eager ? 'high' : 'auto'}
-      decoding="async"
-      class="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
-    />
+    {photo ? (
+      <Picture
+        src={photo}
+        formats={['avif', 'webp']}
+        alt={item.name}
+        widths={[320, 480, 640]}
+        sizes="(min-width: 1024px) 30vw, (min-width: 640px) 50vw, 100vw"
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+        decoding="async"
+        class="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
+      />
+    ) : (
+      <div class="flex h-full w-full items-center justify-center rounded-[12px] bg-ink-100 text-sm font-semibold text-ink-500">
+        Foto em breve
+      </div>
+    )}
   </div>
   <div class="flex flex-1 flex-col gap-3 p-5">
     {showCategory && (
@@ -54,6 +63,7 @@ const whatsapp = buildWhatsAppLink(equipmentMessage(item.name));
       <a
         href={`/equipamentos#${item.id}`}
         class="inline-flex min-h-11 flex-1 items-center justify-center rounded-[12px] border border-ink-900 px-4 py-2 text-sm font-semibold text-ink-900 hover:bg-ink-900 hover:text-white"
+        data-details={item.id}
       >
         Detalhes<span class="sr-only"> de {item.name}</span>
       </a>

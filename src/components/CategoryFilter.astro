@@ -1,0 +1,45 @@
+---
+import type { Category } from '../data/equipment';
+
+interface Props {
+  categories: readonly Category[];
+}
+const { categories } = Astro.props;
+---
+
+<div role="group" aria-labelledby="filtro-categorias" class="flex flex-col gap-3">
+  <p id="filtro-categorias" class="text-sm font-semibold text-ink-900">
+    Filtrar por categoria
+  </p>
+  <div class="flex flex-wrap gap-2">
+    <button
+      type="button"
+      class="chip min-h-11 rounded-[999px] border border-ink-900 px-4 py-2 text-sm font-semibold"
+      data-category-chip=""
+      aria-pressed="true"
+    >
+      Todas
+    </button>
+    {categories.map((category) => (
+      <button
+        type="button"
+        class="chip min-h-11 rounded-[999px] border border-ink-300 bg-white px-4 py-2 text-sm font-semibold text-ink-900"
+        data-category-chip={category.slug}
+        aria-pressed="false"
+      >
+        {category.label}
+      </button>
+    ))}
+  </div>
+</div>
+
+<style>
+  .chip[aria-pressed='true'] {
+    background: var(--color-ink-900);
+    color: #fff;
+    border-color: var(--color-ink-900);
+  }
+  .chip[aria-pressed='false']:hover {
+    border-color: var(--color-ink-900);
+  }
+</style>

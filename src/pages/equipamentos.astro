@@ -1,0 +1,109 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CategoryFilter from '../components/CategoryFilter.astro';
+import EquipmentCard from '../components/EquipmentCard.astro';
+import EquipmentDialog from '../components/EquipmentDialog.astro';
+import { categories, equipment } from '../data/equipment';
+import { buildWhatsAppLink, GENERAL_MESSAGE } from '../lib/whatsapp';
+
+const title = 'Equipamentos para locação | Rosimaq';
+const description =
+  'Betoneira, martelete, vibrador de concreto, andaimes, escadas e mais equipamentos para locação em Santana de Parnaíba e região.';
+
+const itemList = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Equipamentos para locação',
+  numberOfItems: equipment.length,
+  itemListElement: equipment.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.name,
+    url: new URL(`/equipamentos#${item.id}`, Astro.site).href,
+  })),
+};
+---
+
+<BaseLayout title={title} description={description} path="/equipamentos">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(itemList)} />
+  </Fragment>
+
+  <section class="bg-ink-900 pb-12 pt-14 text-white md:pt-20">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+      <p class="text-[0.8125rem] font-semibold uppercase tracking-[.08em] text-brand-300">
+        Catálogo
+      </p>
+      <!-- APROVAR TEXTO -->
+      <h1 class="condensed mt-3 text-[clamp(2.25rem,5vw,4rem)] font-extrabold">
+        Equipamentos para a sua obra
+      </h1>
+      <p class="mt-4 max-w-[65ch] text-lg text-ink-300">
+        Escolha a categoria ou busque pelo nome. Para valores e disponibilidade, chame a gente no
+        WhatsApp.
+      </p>
+    </div>
+  </section>
+
+  <section
+    class="mx-auto max-w-[1200px] px-4 py-10 md:px-6"
+    data-catalog
+    aria-label="Lista de equipamentos"
+  >
+    <div class="flex flex-col gap-6 border-b border-ink-200 pb-8">
+      <CategoryFilter categories={categories} />
+      <div class="flex max-w-md flex-col gap-2">
+        <label for="busca-equipamento" class="text-sm font-semibold text-ink-900">
+          Buscar por nome
+        </label>
+        <input
+          id="busca-equipamento"
+          type="search"
+          data-search
+          autocomplete="off"
+          placeholder="Ex.: andaime, betoneira, escada"
+          class="min-h-12 w-full rounded-[12px] border border-ink-300 bg-white px-4 text-base text-ink-900 placeholder:text-ink-500"
+        />
+      </div>
+      <p data-count aria-live="polite" class="text-sm font-semibold text-ink-500">
+        {equipment.length} equipamentos
+      </p>
+    </div>
+
+    <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {equipment.map((item) => (
+        <li>
+          <EquipmentCard item={item} eager={item.id === 'betoneira-400l'} />
+        </li>
+      ))}
+    </ul>
+
+    <div
+      data-empty
+      class="hidden mt-10 flex flex-col items-start gap-4 rounded-[12px] bg-ink-100 p-8"
+    >
+      <p class="text-lg font-bold text-ink-900">
+        Nenhum equipamento encontrado. Fale com a gente no WhatsApp, podemos ajudar.
+      </p>
+      <a
+        href={buildWhatsAppLink(GENERAL_MESSAGE)}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex min-h-12 items-center rounded-[12px] bg-ink-900 px-5 py-3 font-semibold text-brand-300 hover:bg-ink-700"
+      >
+        Falar no WhatsApp
+      </a>
+    </div>
+  </section>
+
+  {equipment.map((item) => (
+    <EquipmentDialog item={item} />
+  ))}
+
+  <script>
+    import { initCatalog } from '../lib/catalogPage';
+    import { initDialogs } from '../lib/dialogs';
+    initCatalog();
+    initDialogs();
+  </script>
+</BaseLayout>

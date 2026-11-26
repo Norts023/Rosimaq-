@@ -1,4 +1,9 @@
+import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
+
+// Chromium pré-instalado no ambiente remoto; em CI usa o do Playwright.
+const preinstalled = '/opt/pw-browsers/chromium';
+const executablePath = existsSync(preinstalled) ? preinstalled : undefined;
 
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -9,6 +14,7 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:4321',
     trace: 'retain-on-failure',
+    launchOptions: { executablePath, args: ['--no-sandbox'] },
   },
   projects: [
     { name: 'mobile', use: { ...devices['Pixel 7'] } },
