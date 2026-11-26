@@ -1,0 +1,42 @@
+---
+import Icon from './Icon.astro';
+
+const items = [
+  {
+    icon: 'shield' as const,
+    title: 'Qualidade nos equipamentos',
+    text: 'Máquinas revisadas e prontas para o uso.',
+  },
+  {
+    icon: 'box' as const,
+    title: 'Segurança na sua obra',
+    text: 'Andaimes e acessórios alinhados à NR18.',
+  },
+  {
+    icon: 'chat' as const,
+    title: 'Atendimento personalizado',
+    text: 'Fale direto com a equipe, sem robô.',
+  },
+  {
+    icon: 'truck' as const,
+    title: 'Entrega e retirada',
+    text: 'Levamos até a obra e buscamos no fim.',
+  },
+];
+---
+
+<section class="border-b border-ink-200 bg-white" aria-label="Diferenciais">
+  <ul class="mx-auto grid max-w-[1200px] gap-6 px-4 py-10 sm:grid-cols-2 md:grid-cols-4 md:px-6">
+    {items.map((item) => (
+      <li class="flex gap-4" data-reveal>
+        <span class="inline-flex size-12 shrink-0 items-center justify-center rounded-[12px] bg-brand-50 text-ink-900">
+          <Icon name={item.icon} class="size-6" />
+        </span>
+        <div>
+          <h3 class="text-base font-bold text-ink-900">{item.title}</h3>
+          <p class="text-sm text-ink-500">{item.text}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</section>

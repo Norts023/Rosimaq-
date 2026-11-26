@@ -1,0 +1,40 @@
+---
+import { company } from '../data/company';
+import { buildWhatsAppLink, GENERAL_MESSAGE } from '../lib/whatsapp';
+import Button from './Button.astro';
+---
+
+<section
+  class="bg-gradient-to-b from-ink-700 to-ink-900 py-[clamp(4rem,10vw,8rem)] text-white"
+  aria-labelledby="regioes-title"
+>
+  <div class="mx-auto grid max-w-[1200px] gap-10 px-4 md:grid-cols-[1fr_1.2fr] md:px-6">
+    <div class="flex flex-col gap-5">
+      <p class="text-[0.8125rem] font-semibold uppercase tracking-[.08em] text-brand-300">
+        Onde atendemos
+      </p>
+      <!-- APROVAR TEXTO -->
+      <h2 id="regioes-title" class="condensed text-[clamp(1.75rem,3.5vw,2.75rem)] font-extrabold">
+        Atendemos sua obra em
+      </h2>
+      <p class="max-w-[65ch] text-ink-300">Está em outra cidade? Consulte pelo WhatsApp.</p>
+      <div class="mt-2">
+        <Button
+          href={buildWhatsAppLink(GENERAL_MESSAGE)}
+          icon="whatsapp"
+          external
+          variant="primary"
+        >
+          Consultar minha cidade
+        </Button>
+      </div>
+    </div>
+    <ul class="flex flex-wrap content-start gap-3" aria-label="Municípios atendidos">
+      {company.serviceArea.map((city) => (
+        <li class="rounded-[999px] border border-white/15 bg-white/5 px-5 py-3 text-lg font-bold text-white">
+          {city}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
