@@ -1,0 +1,18 @@
+---
+import { withBase } from '../lib/url';
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/logo-rosimaq-sobre-preto.png';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<a
+  href={withBase('/')}
+  class:list={['inline-flex shrink-0 items-center', className]}
+  aria-label="Rosimaq, página inicial"
+>
+  <Image src={logo} alt="" width={180} height={90} class="h-10 w-auto md:h-12" loading="eager" />
+</a>

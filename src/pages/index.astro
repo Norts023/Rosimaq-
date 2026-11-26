@@ -1,0 +1,57 @@
+---
+import { absoluteUrl } from '../lib/url';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Benefits from '../components/Benefits.astro';
+import CategoryBento from '../components/CategoryBento.astro';
+import CtaBanner from '../components/CtaBanner.astro';
+import FeaturedGrid from '../components/FeaturedGrid.astro';
+import Hero from '../components/Hero.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Regions from '../components/Regions.astro';
+import { company } from '../data/company';
+
+const title = 'Rosimaq | Locação de equipamentos para construção civil';
+const description =
+  'Locação de equipamentos para construção civil em Santana de Parnaíba e região. Peça seu orçamento pelo WhatsApp.';
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: company.name,
+  legalName: company.legalName,
+  telephone: `+${company.whatsapp}`,
+  email: company.email,
+  url: absoluteUrl('/', Astro.site),
+  image: absoluteUrl('/og-image.jpg', Astro.site),
+  logo: absoluteUrl('/icon-512.png', Astro.site),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${company.address.street}, ${company.address.complement}`,
+    addressLocality: company.address.city,
+    addressRegion: company.address.state,
+    postalCode: company.address.zip,
+    addressCountry: 'BR',
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: company.hours.open,
+    closes: company.hours.close,
+  },
+  areaServed: company.serviceArea.map((name) => ({ '@type': 'City', name: `${name}, SP` })),
+  sameAs: [company.instagram],
+};
+---
+
+<BaseLayout title={title} description={description} path="/">
+  <Fragment slot="head">
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  </Fragment>
+  <Hero />
+  <Benefits />
+  <CategoryBento />
+  <FeaturedGrid />
+  <HowItWorks />
+  <Regions />
+  <CtaBanner />
+</BaseLayout>

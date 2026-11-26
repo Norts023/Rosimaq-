@@ -1,0 +1,88 @@
+---
+const steps = [
+  { title: 'Escolha o equipamento', text: 'Veja o catálogo e selecione o que a sua obra precisa.' },
+  {
+    title: 'Chame no WhatsApp',
+    text: 'Diga o equipamento e o endereço. Respondemos com valores e disponibilidade.',
+  },
+  { title: 'Entregamos na sua obra', text: 'A equipe leva e deixa o equipamento pronto para uso.' },
+  {
+    title: 'Retiramos ao final',
+    text: 'Ao terminar, a gente busca. Sem preocupação com devolução.',
+  },
+];
+---
+
+<section class="bg-ink-100 py-[clamp(4rem,10vw,8rem)]" aria-labelledby="como-funciona-title">
+  <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+    <p class="text-[0.8125rem] font-semibold uppercase tracking-[.08em] text-ink-500">
+      Como funciona
+    </p>
+    <!-- APROVAR TEXTO -->
+    <h2
+      id="como-funciona-title"
+      class="condensed mt-3 text-[clamp(1.75rem,3.5vw,2.75rem)] font-extrabold"
+    >
+      Da escolha à retirada em quatro passos
+    </h2>
+
+    <div class="relative mt-14">
+      <!-- Trilho: se preenche em amarelo conforme a rolagem (scroll-driven, com fallback estático). -->
+      <div
+        class="steps-track absolute left-0 right-0 top-[22px] hidden h-[3px] bg-ink-200 md:block"
+        aria-hidden="true"
+      >
+        <span class="steps-fill block h-full origin-left bg-brand-500"></span>
+      </div>
+      <ol class="grid gap-10 md:grid-cols-4 md:gap-6">
+        {steps.map((step, i) => (
+          <li class="relative flex gap-4 md:flex-col md:gap-5">
+            <span
+              class="relative z-10 inline-flex size-12 shrink-0 items-center justify-center rounded-full bg-ink-900 font-extrabold text-brand-300"
+              aria-hidden="true"
+            >
+              {i + 1}
+            </span>
+            <div class="flex flex-col gap-2">
+              <h3 class="flex items-center gap-2 text-lg font-bold text-ink-900">
+                <span class="sr-only">Passo {i + 1}:</span>
+                {step.title}
+              </h3>
+              <p class="max-w-[40ch] text-ink-500">{step.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .steps-fill {
+    transform: scaleX(0);
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .steps-fill {
+        transform: none;
+        animation: fill-track linear both;
+        animation-timeline: view();
+        animation-range: entry 20% cover 60%;
+      }
+    }
+  }
+  @keyframes fill-track {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+  /* Fallback estático: sem scroll-driven, o trilho aparece cheio. */
+  @supports not (animation-timeline: view()) {
+    .steps-fill {
+      transform: none;
+    }
+  }
+</style>

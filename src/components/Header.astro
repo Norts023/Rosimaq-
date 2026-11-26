@@ -1,0 +1,125 @@
+---
+import { withBase } from '../lib/url';
+import { buildWhatsAppLink, GENERAL_MESSAGE } from '../lib/whatsapp';
+import Button from './Button.astro';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import OpenStatus from './OpenStatus.astro';
+
+const links = [
+  { href: withBase('/'), label: 'Início' },
+  { href: withBase('/equipamentos'), label: 'Equipamentos' },
+  { href: withBase('/contato'), label: 'Contato' },
+];
+const trimSlash = (path: string) => path.replace(/\/$/, '') || '/';
+const currentPath = trimSlash(Astro.url.pathname);
+const whatsapp = buildWhatsAppLink(GENERAL_MESSAGE);
+---
+
+<header
+  transition:name="site-header"
+  class="sticky top-0 z-40 border-b border-white/10 bg-ink-900/95 backdrop-blur-md"
+>
+  <div class="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-4 md:px-6">
+    <Logo />
+    <nav aria-label="Principal" class="hidden md:block">
+      <ul class="flex items-center gap-6">
+        {links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              aria-current={currentPath === trimSlash(link.href) ? 'page' : undefined}
+              class="text-sm font-semibold text-ink-300 transition-colors hover:text-brand-300 aria-[current=page]:text-brand-300"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <div class="flex items-center gap-3">
+      <div class="hidden lg:block">
+        <OpenStatus />
+      </div>
+      <div class="hidden md:block">
+        <Button href={whatsapp} icon="whatsapp" external class="min-h-11 px-4 py-2 text-sm">
+          Pedir orçamento
+        </Button>
+      </div>
+      <button
+        type="button"
+        class="inline-flex size-12 items-center justify-center rounded-[12px] text-white md:hidden"
+        aria-label="Abrir menu"
+        aria-haspopup="dialog"
+        data-menu-open
+      >
+        <Icon name="menu" class="size-6" />
+      </button>
+    </div>
+  </div>
+
+  <dialog
+    data-menu
+    class="m-0 ml-auto h-dvh max-h-none w-[min(88vw,360px)] bg-ink-900 p-0 text-white backdrop:bg-black/60"
+    aria-label="Menu"
+  >
+    <div class="flex h-full flex-col gap-8 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+      <div class="flex items-center justify-between">
+        <Logo />
+        <button
+          type="button"
+          class="inline-flex size-12 items-center justify-center rounded-[12px]"
+          aria-label="Fechar menu"
+          data-menu-close
+        >
+          <Icon name="close" class="size-6" />
+        </button>
+      </div>
+      <nav aria-label="Principal (celular)">
+        <ul class="flex flex-col gap-2">
+          {links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                aria-current={currentPath === trimSlash(link.href) ? 'page' : undefined}
+                class="block rounded-[12px] px-3 py-4 text-2xl font-extrabold uppercase text-white hover:bg-white/5 aria-[current=page]:text-brand-300"
+                style="font-stretch: 75%"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <Button href={whatsapp} icon="whatsapp" external>
+        Pedir orçamento no WhatsApp
+      </Button>
+    </div>
+  </dialog>
+</header>
+
+<script>
+  // Reinicia a cada página: o cabeçalho é recriado na navegação com View Transitions.
+  function initMenu(): void {
+    const openButton = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+    const dialog = document.querySelector<HTMLDialogElement>('[data-menu]');
+    const closeButton = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+    if (!openButton || !dialog || !closeButton) return;
+    if (dialog.dataset.ready === 'on') return;
+    dialog.dataset.ready = 'on';
+
+    openButton.addEventListener('click', () => {
+      dialog.showModal();
+      dialog.querySelector<HTMLElement>('a, button')?.focus();
+    });
+    closeButton.addEventListener('click', () => dialog.close());
+    // Clique no fundo (fora do painel) fecha o menu.
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+    // Esc fecha nativamente; devolve o foco ao botão de origem.
+    dialog.addEventListener('close', () => openButton.focus());
+  }
+  document.addEventListener('astro:page-load', initMenu);
+  initMenu();
+</script>

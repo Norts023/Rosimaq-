@@ -1,0 +1,165 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/archivo/wght.css';
+@import '@fontsource-variable/archivo/wdth.css';
+
+/* Tokens da seção 5 do prompt. Fonte única de cor, espaço e forma. */
+:root {
+  --color-ink-900: #111111;
+  --color-ink-700: #2b2b2b;
+  --color-ink-500: #5a5a5a;
+  --color-ink-400: #8a8a8a;
+  --color-ink-300: #bbbbbb;
+  --color-ink-200: #e3e3e3;
+  --color-ink-100: #f4f4f2;
+  --color-ink-50: #fafaf8;
+  --color-brand-50: #fff8db;
+  --color-brand-300: #ffd84d;
+  --color-brand-500: #f5b800;
+  --color-brand-600: #d99e00;
+  --color-brand-700: #b88a00;
+  --color-brand-900: #5c4500;
+
+  --gradient-industrial: linear-gradient(135deg, #ffd84d 0%, #f5b800 50%, #b88a00 100%);
+  --gradient-night: linear-gradient(180deg, #2b2b2b 0%, #111111 100%);
+  --gradient-spotlight: radial-gradient(
+    circle at var(--x, 70%) var(--y, 40%),
+    rgba(245, 184, 0, 0.28) 0%,
+    rgba(245, 184, 0, 0) 55%
+  );
+
+  --radius-card: 12px;
+  --radius-pill: 999px;
+  --shadow-hover: 0 20px 40px -20px rgba(0, 0, 0, 0.35);
+  --max-width: 1200px;
+  --prose-width: 65ch;
+  --section-padding: clamp(4rem, 10vw, 8rem);
+}
+
+@theme {
+  --color-ink-900: #111111;
+  --color-ink-700: #2b2b2b;
+  --color-ink-500: #5a5a5a;
+  --color-ink-400: #8a8a8a;
+  --color-ink-300: #bbbbbb;
+  --color-ink-200: #e3e3e3;
+  --color-ink-100: #f4f4f2;
+  --color-ink-50: #fafaf8;
+  --color-brand-50: #fff8db;
+  --color-brand-300: #ffd84d;
+  --color-brand-500: #f5b800;
+  --color-brand-600: #d99e00;
+  --color-brand-700: #b88a00;
+  --color-brand-900: #5c4500;
+  --font-sans: 'Archivo Variable', system-ui, sans-serif;
+  --radius-card: 12px;
+  --radius-pill: 999px;
+  --shadow-hover: 0 20px 40px -20px rgba(0, 0, 0, 0.35);
+}
+
+@layer base {
+  html {
+    color: var(--color-ink-900);
+    background: var(--color-ink-50);
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-size: 1rem;
+    min-height: 100dvh;
+  }
+
+  @media (min-width: 1125px) {
+    body {
+      font-size: 1.125rem;
+    }
+  }
+
+  h1,
+  h2 {
+    font-stretch: 75%;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.95;
+  }
+
+  ::selection {
+    background: var(--color-brand-500);
+    color: var(--color-ink-900);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-brand-500);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Utilitários da direção de arte. */
+.condensed {
+  font-stretch: 75%;
+  font-weight: 800;
+  text-transform: uppercase;
+  line-height: 0.95;
+}
+
+/* Grão sutil (opacidade ≤ 0,05) para dar profundidade sem pesar. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Revelação ao rolar: só oculta quando o JS confirmou que vai revelar. */
+.reveal-ready [data-reveal]:not(.is-visible) {
+  opacity: 0;
+  transform: translateY(16px);
+}
+[data-reveal] {
+  transition:
+    opacity 600ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms),
+    transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms);
+}
+
+/* Botão primário: a seta desliza no hover (usado em Button). */
+::selection {
+  background: var(--color-brand-500);
+  color: var(--color-ink-900);
+}
+
+/* Transições entre páginas: sem movimento para quem prefere reduzir. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Cabeçalho e barra mobile não se movem na navegação entre páginas. */
+::view-transition-group(site-header),
+::view-transition-group(site-mobile-bar) {
+  animation-duration: 0s;
+}
+::view-transition-old(site-header),
+::view-transition-new(site-header),
+::view-transition-old(site-mobile-bar),
+::view-transition-new(site-mobile-bar) {
+  animation: none;
+}

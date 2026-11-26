@@ -1,0 +1,53 @@
+---
+import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import MobileActionBar from '../components/MobileActionBar.astro';
+import Seo from '../components/Seo.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+}
+const { title, description, path = '/' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <Seo title={title} description={description} path={path} />
+    <ClientRouter />
+    <slot name="head" />
+  </head>
+  <body class="bg-ink-50 text-ink-900 antialiased">
+    <a
+      href="#conteudo"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-[12px] focus:bg-brand-500 focus:px-4 focus:py-3 focus:font-bold focus:text-ink-900"
+    >
+      Pular para o conteúdo
+    </a>
+    <Header />
+    <main id="conteudo" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <MobileActionBar />
+    <script>
+      import { initReveal } from '../lib/reveal';
+
+      // A entrada das palavras do título roda só na primeira carga da sessão.
+      let introDone = false;
+      document.addEventListener('astro:page-load', () => {
+        initReveal();
+        if (!introDone) {
+          introDone = true;
+          window.setTimeout(() => document.documentElement.classList.add('intro-done'), 1000);
+        }
+      });
+    </script>
+  </body>
+</html>

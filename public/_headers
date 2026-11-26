@@ -1,0 +1,8 @@
+# Cabeçalhos de segurança para Netlify e Cloudflare Pages.
+# A Content-Security-Policy de cada página é gerada no build (scripts/csp-integration.mjs)
+# e acrescentada a este arquivo em dist/_headers. Vercel usa vercel.json (não incluído).
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  X-Frame-Options: DENY
