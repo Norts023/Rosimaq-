@@ -1,0 +1,36 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary' | 'dark';
+  icon?: 'whatsapp' | 'phone' | 'arrow';
+  external?: boolean;
+  class?: string;
+}
+const { href, variant = 'primary', icon, external = false, class: extra } = Astro.props;
+const isExternal = external || href.startsWith('https://');
+const base =
+  'group inline-flex min-h-12 items-center justify-center gap-2 rounded-[12px] px-5 py-3 font-semibold transition-[background,color,box-shadow,transform] duration-200 focus-visible:outline-brand-500';
+const variants = {
+  primary:
+    'bg-brand-500 text-ink-900 hover:bg-[image:var(--gradient-industrial)] hover:shadow-[0_10px_24px_-12px_rgba(245,184,0,.7)]',
+  secondary: 'border border-white/25 text-white hover:border-brand-500 hover:text-brand-300',
+  dark: 'bg-ink-900 text-brand-300 hover:bg-ink-700',
+};
+---
+
+<a
+  href={href}
+  class:list={[base, variants[variant], extra]}
+  target={isExternal ? '_blank' : undefined}
+  rel={isExternal ? 'noopener noreferrer' : undefined}
+>
+  {icon && <Icon name={icon} class="size-5 shrink-0" />}
+  <span>
+    <slot />
+  </span>
+  {icon === 'arrow' && (
+    <Icon name="arrow" class="size-5 transition-transform duration-200 group-hover:translate-x-1" />
+  )}
+</a>

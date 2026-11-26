@@ -1,0 +1,71 @@
+---
+import { getOpenStatus } from '../lib/openStatus';
+import { company } from '../data/company';
+
+// Renderizado no build como fallback. O script atualiza com o horário real do visitante.
+const fallback = getOpenStatus();
+const openHour = Number(company.hours.open.split(':')[0]);
+const closeHour = Number(company.hours.close.split(':')[0]);
+---
+
+<span
+  class="inline-flex items-center gap-2 rounded-[999px] border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-ink-300"
+  data-open-status
+  data-open-hour={openHour}
+  data-close-hour={closeHour}
+>
+  <span class="relative flex size-2.5" aria-hidden="true">
+    <span
+      data-status-dot
+      class:list={[
+        'absolute inline-flex size-full rounded-full',
+        fallback.isOpen ? 'animate-ping bg-emerald-400/60' : 'bg-ink-400',
+      ]}
+    ></span>
+    <span
+      data-status-core
+      class:list={[
+        'relative inline-flex size-2.5 rounded-full',
+        fallback.isOpen ? 'bg-emerald-400' : 'bg-ink-400',
+      ]}
+    ></span>
+  </span>
+  <span data-status-label>{fallback.label}</span>
+  <span class="sr-only">
+    Horário de atendimento: todos os dias, {openHour}h às {closeHour}h
+  </span>
+</span>
+
+<script>
+  // Calcula o estado no fuso de São Paulo a partir do relógio do visitante.
+  const timezone = 'America/Sao_Paulo';
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: timezone,
+    hour: 'numeric',
+    hourCycle: 'h23',
+  });
+
+  function update(root: HTMLElement) {
+    const openHour = Number(root.dataset.openHour);
+    const closeHour = Number(root.dataset.closeHour);
+    const hour = Number(formatter.format(new Date())) % 24;
+    const isOpen = hour >= openHour && hour < closeHour;
+    const label = root.querySelector<HTMLElement>('[data-status-label]');
+    const dot = root.querySelector<HTMLElement>('[data-status-dot]');
+    const core = root.querySelector<HTMLElement>('[data-status-core]');
+    if (label)
+      label.textContent = isOpen
+        ? `Aberto agora · até ${closeHour}h`
+        : `Fechado · abre às ${openHour}h`;
+    dot?.classList.toggle('animate-ping', isOpen);
+    dot?.classList.toggle('bg-emerald-400/60', isOpen);
+    dot?.classList.toggle('bg-ink-400', !isOpen);
+    core?.classList.toggle('bg-emerald-400', isOpen);
+    core?.classList.toggle('bg-ink-400', !isOpen);
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-open-status]').forEach((el) => {
+    update(el);
+    setInterval(() => update(el), 60_000);
+  });
+</script>

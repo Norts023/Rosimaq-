@@ -1,0 +1,21 @@
+---
+interface Props {
+  class?: string;
+}
+// Marca em texto até o logo oficial entrar em src/assets/brand/ (etapa 3).
+const { class: className } = Astro.props;
+---
+
+<a
+  href="/"
+  class:list={[
+    'inline-flex items-baseline gap-1 font-extrabold uppercase tracking-tight text-white',
+    className,
+  ]}
+  aria-label="Rosimaq, página inicial"
+>
+  <span class="text-2xl" style="font-stretch: 75%">
+    Rosimaq
+  </span>
+  <span class="block h-2 w-2 rounded-full bg-brand-500" aria-hidden="true"></span>
+</a>

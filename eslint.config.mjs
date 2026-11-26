@@ -2,15 +2,15 @@ import js from '@eslint/js';
 import eslintPluginAstro from 'eslint-plugin-astro';
 import tseslint from 'typescript-eslint';
 
-export default tseslint.config(
+export default [
   { ignores: ['dist', '.astro', 'node_modules', 'test-results', 'playwright-report'] },
+  { languageOptions: { globals: { process: 'readonly' } } },
   js.configs.recommended,
   ...tseslint.configs.strict,
   ...eslintPluginAstro.configs.recommended,
   {
-    languageOptions: { globals: { process: 'readonly' } },
     rules: {
       '@typescript-eslint/no-non-null-assertion': 'error',
     },
   },
-);
+];

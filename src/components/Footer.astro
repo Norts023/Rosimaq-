@@ -1,0 +1,77 @@
+---
+import { company } from '../data/company';
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import OpenStatus from './OpenStatus.astro';
+
+const year = new Date().getFullYear();
+const { address } = company;
+const openHour = Number(company.hours.open.split(':')[0]);
+const closeHour = Number(company.hours.close.split(':')[0]);
+---
+
+<footer class="border-t border-white/10 bg-ink-900 pb-24 text-ink-300 md:pb-0">
+  <div class="mx-auto grid max-w-[1200px] gap-10 px-4 py-16 md:grid-cols-3 md:px-6">
+    <div class="flex flex-col gap-4">
+      <Logo />
+      <p class="max-w-[40ch] text-base">{company.tagline}. Equipamentos prontos para a sua obra.</p>
+      <OpenStatus />
+    </div>
+
+    <nav aria-label="Rodapé" class="flex flex-col gap-3 text-base">
+      <a class="w-fit hover:text-brand-300" href="/">
+        Início
+      </a>
+      <a class="w-fit hover:text-brand-300" href="/equipamentos">
+        Equipamentos
+      </a>
+      <a class="w-fit hover:text-brand-300" href="/contato">
+        Contato
+      </a>
+      <a class="w-fit hover:text-brand-300" href="/privacidade">
+        Política de privacidade
+      </a>
+    </nav>
+
+    <div class="flex flex-col gap-3 text-sm">
+      <p class="text-white">{company.legalName}</p>
+      <p>CNPJ {company.cnpj}</p>
+      <p>
+        {address.street}, {address.complement}
+        <br />
+        {address.district}, {address.city} · {address.state} · CEP {address.zip}
+      </p>
+      <p>
+        Horário: {company.hours.days}, {openHour}h às {closeHour}h
+      </p>
+      <p class="flex flex-wrap gap-4">
+        <a class="inline-flex items-center gap-2 hover:text-brand-300" href={company.phoneHref}>
+          <Icon name="phone" class="size-4" />
+          {company.phoneDisplay}
+        </a>
+        <a
+          class="inline-flex items-center gap-2 hover:text-brand-300"
+          href={`mailto:${company.email}`}
+        >
+          <Icon name="mail" class="size-4" />
+          {company.email}
+        </a>
+        <a
+          class="inline-flex items-center gap-2 hover:text-brand-300"
+          href={company.instagram}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="instagram" class="size-4" />
+          Instagram
+        </a>
+      </p>
+    </div>
+  </div>
+  <div class="border-t border-white/10">
+    <p class="mx-auto max-w-[1200px] px-4 py-6 text-xs md:px-6">
+      © {year} {company.legalName.replace('LOCACAO', 'Locação').replace('CONSTRUCAO', 'Construção')}{' '}
+      · CNPJ {company.cnpj}
+    </p>
+  </div>
+</footer>
