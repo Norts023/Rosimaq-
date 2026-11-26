@@ -143,3 +143,23 @@ body::before {
   background: var(--color-brand-500);
   color: var(--color-ink-900);
 }
+
+/* Transições entre páginas: sem movimento para quem prefere reduzir. */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+/* Cabeçalho e barra mobile não se movem na navegação entre páginas. */
+::view-transition-group(site-header),
+::view-transition-group(site-mobile-bar) {
+  animation-duration: 0s;
+}
+::view-transition-old(site-header),
+::view-transition-new(site-header),
+::view-transition-old(site-mobile-bar),
+::view-transition-new(site-mobile-bar) {
+  animation: none;
+}

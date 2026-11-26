@@ -1,6 +1,6 @@
 ---
-import { getOpenStatus } from '../lib/openStatus';
 import { company } from '../data/company';
+import { getOpenStatus } from '../lib/openStatus';
 
 // Renderizado no build como fallback. O script atualiza com o horário real do visitante.
 const fallback = getOpenStatus();
@@ -37,35 +37,40 @@ const closeHour = Number(company.hours.close.split(':')[0]);
 </span>
 
 <script>
-  // Calcula o estado no fuso de São Paulo a partir do relógio do visitante.
-  const timezone = 'America/Sao_Paulo';
+  // Estado no fuso de São Paulo, a partir do relógio do visitante.
+  // Um único intervalo atualiza todas as pílulas da página, inclusive após navegação.
   const formatter = new Intl.DateTimeFormat('en-US', {
-    timeZone: timezone,
+    timeZone: 'America/Sao_Paulo',
     hour: 'numeric',
     hourCycle: 'h23',
   });
 
-  function update(root: HTMLElement) {
-    const openHour = Number(root.dataset.openHour);
-    const closeHour = Number(root.dataset.closeHour);
+  function refresh(): void {
     const hour = Number(formatter.format(new Date())) % 24;
-    const isOpen = hour >= openHour && hour < closeHour;
-    const label = root.querySelector<HTMLElement>('[data-status-label]');
-    const dot = root.querySelector<HTMLElement>('[data-status-dot]');
-    const core = root.querySelector<HTMLElement>('[data-status-core]');
-    if (label)
-      label.textContent = isOpen
-        ? `Aberto agora · até ${closeHour}h`
-        : `Fechado · abre às ${openHour}h`;
-    dot?.classList.toggle('animate-ping', isOpen);
-    dot?.classList.toggle('bg-emerald-400/60', isOpen);
-    dot?.classList.toggle('bg-ink-400', !isOpen);
-    core?.classList.toggle('bg-emerald-400', isOpen);
-    core?.classList.toggle('bg-ink-400', !isOpen);
+    document.querySelectorAll<HTMLElement>('[data-open-status]').forEach((root) => {
+      const openHour = Number(root.dataset.openHour);
+      const closeHour = Number(root.dataset.closeHour);
+      const isOpen = hour >= openHour && hour < closeHour;
+      const label = root.querySelector<HTMLElement>('[data-status-label]');
+      const dot = root.querySelector<HTMLElement>('[data-status-dot]');
+      const core = root.querySelector<HTMLElement>('[data-status-core]');
+      if (label)
+        label.textContent = isOpen
+          ? `Aberto agora · até ${closeHour}h`
+          : `Fechado · abre às ${openHour}h`;
+      dot?.classList.toggle('animate-ping', isOpen);
+      dot?.classList.toggle('bg-emerald-400/60', isOpen);
+      dot?.classList.toggle('bg-ink-400', !isOpen);
+      core?.classList.toggle('bg-emerald-400', isOpen);
+      core?.classList.toggle('bg-ink-400', !isOpen);
+    });
   }
 
-  document.querySelectorAll<HTMLElement>('[data-open-status]').forEach((el) => {
-    update(el);
-    setInterval(() => update(el), 60_000);
+  let timer: number | undefined;
+  document.addEventListener('astro:page-load', () => {
+    refresh();
+    if (timer === undefined) timer = window.setInterval(refresh, 60_000);
   });
+  refresh();
+  if (timer === undefined) timer = window.setInterval(refresh, 60_000);
 </script>

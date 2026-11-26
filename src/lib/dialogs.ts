@@ -16,8 +16,11 @@ export function openDialog(dialog: HTMLDialogElement, trigger: HTMLElement | nul
   }
 }
 
+let hashListenerAdded = false;
+
 export function initDialogs(): void {
   const dialogs = Array.from(document.querySelectorAll<HTMLDialogElement>('dialog[data-dialog]'));
+  if (dialogs.length === 0) return;
   const byId = new Map(dialogs.map((dialog) => [dialog.id, dialog]));
 
   dialogs.forEach((dialog) => {
@@ -55,5 +58,8 @@ export function initDialogs(): void {
     }
   };
   openFromHash();
-  window.addEventListener('hashchange', openFromHash);
+  if (!hashListenerAdded) {
+    window.addEventListener('hashchange', openFromHash);
+    hashListenerAdded = true;
+  }
 }

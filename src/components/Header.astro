@@ -14,7 +14,10 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 const whatsapp = buildWhatsAppLink(GENERAL_MESSAGE);
 ---
 
-<header class="sticky top-0 z-40 border-b border-white/10 bg-ink-900/95 backdrop-blur-md">
+<header
+  transition:name="site-header"
+  class="sticky top-0 z-40 border-b border-white/10 bg-ink-900/95 backdrop-blur-md"
+>
   <div class="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-4 md:px-6">
     <Logo />
     <nav aria-label="Principal" class="hidden md:block">
@@ -94,11 +97,15 @@ const whatsapp = buildWhatsAppLink(GENERAL_MESSAGE);
 </header>
 
 <script>
-  const openButton = document.querySelector<HTMLButtonElement>('[data-menu-open]');
-  const dialog = document.querySelector<HTMLDialogElement>('[data-menu]');
-  const closeButton = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+  // Reinicia a cada página: o cabeçalho é recriado na navegação com View Transitions.
+  function initMenu(): void {
+    const openButton = document.querySelector<HTMLButtonElement>('[data-menu-open]');
+    const dialog = document.querySelector<HTMLDialogElement>('[data-menu]');
+    const closeButton = document.querySelector<HTMLButtonElement>('[data-menu-close]');
+    if (!openButton || !dialog || !closeButton) return;
+    if (dialog.dataset.ready === 'on') return;
+    dialog.dataset.ready = 'on';
 
-  if (openButton && dialog && closeButton) {
     openButton.addEventListener('click', () => {
       dialog.showModal();
       dialog.querySelector<HTMLElement>('a, button')?.focus();
@@ -111,4 +118,6 @@ const whatsapp = buildWhatsAppLink(GENERAL_MESSAGE);
     // Esc fecha nativamente; devolve o foco ao botão de origem.
     dialog.addEventListener('close', () => openButton.focus());
   }
+  document.addEventListener('astro:page-load', initMenu);
+  initMenu();
 </script>

@@ -9,6 +9,8 @@ const pages = [
 
 for (const { path, name } of pages) {
   test(`${name}: carrega sem erros e sem violações sérias de acessibilidade`, async ({ page }) => {
+    // Movimento reduzido: conteúdo revelado ao rolar fica visível para a análise de contraste.
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     const errors: string[] = [];
     page.on('console', (msg) => msg.type() === 'error' && errors.push(msg.text()));
     page.on('pageerror', (err) => errors.push(err.message));

@@ -103,7 +103,9 @@ const itemList = {
   <script>
     import { initCatalog } from '../lib/catalogPage';
     import { initDialogs } from '../lib/dialogs';
-    initCatalog();
-    initDialogs();
+    document.addEventListener('astro:page-load', () => {
+      initCatalog();
+      initDialogs();
+    });
   </script>
 </BaseLayout>
