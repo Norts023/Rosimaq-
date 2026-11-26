@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { company } from '../data/company';
+
+const title = 'Política de privacidade | Rosimaq';
+const description =
+  'Como a Rosimaq trata dados no site: sem cookies de rastreamento, sem analytics e sem formulários.';
+---
+
+<BaseLayout title={title} description={description} path="/privacidade">
+  <article class="mx-auto max-w-[1200px] px-4 py-16 md:px-6">
+    <div class="mx-auto max-w-[65ch] space-y-6 text-ink-900">
+      <!-- REVISAR COM A ROSIMAQ -->
+      <h1 class="condensed text-[clamp(2.25rem,5vw,4rem)] font-extrabold">
+        Política de privacidade
+      </h1>
+      <p>
+        Esta página explica como o site da Rosimaq trata informações. Ela é curta de propósito: o
+        site foi feito para ser simples.
+      </p>
+
+      <h2 class="text-xl font-bold">Cookies e rastreamento</h2>
+      <p>
+        O site não usa cookies de rastreamento, não tem analytics e não carrega scripts, fontes,
+        mapas ou widgets de terceiros.
+      </p>
+
+      <h2 class="text-xl font-bold">Formulários e dados enviados</h2>
+      <p>
+        O site não tem formulário. Quando você pede um orçamento, a conversa acontece no WhatsApp, e
+        o tratamento dos seus dados segue a política de privacidade do próprio WhatsApp. Pelo e-mail
+        ou telefone, valem as mesmas regras de uso dos dados que você fornecer nessas conversas.
+      </p>
+
+      <h2 class="text-xl font-bold">Responsável</h2>
+      <p>
+        {company.legalName}, CNPJ {company.cnpj}. Para dúvidas sobre esta política, escreva para
+        <a
+          class="font-semibold underline decoration-brand-500 decoration-2 underline-offset-4"
+          href={`mailto:${company.email}`}
+        >
+          {company.email}
+        </a>
+        .
+      </p>
+
+      <h2 class="text-xl font-bold">Alterações</h2>
+      <p>Esta política pode ser atualizada. A versão publicada nesta página é a válida.</p>
+    </div>
+  </article>
+</BaseLayout>

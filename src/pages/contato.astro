@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Icon from '../components/Icon.astro';
+import { company } from '../data/company';
+import { buildWhatsAppLink, GENERAL_MESSAGE } from '../lib/whatsapp';
+
+const title = 'Contato | Rosimaq';
+const description =
+  'Fale com a Rosimaq pelo WhatsApp, telefone ou e-mail. Atendemos em Santana de Parnaíba, Cajamar, Barueri, Pirapora do Bom Jesus e Itapevi.';
+
+const { address, hours } = company;
+const fullAddress = `${address.street}, ${address.complement}, ${address.district}, ${address.city} - ${address.state}, ${address.zip}`;
+const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
+const openHour = Number(hours.open.split(':')[0]);
+const closeHour = Number(hours.close.split(':')[0]);
+---
+
+<BaseLayout title={title} description={description} path="/contato">
+  <section class="bg-ink-900 pb-12 pt-14 text-white md:pt-20">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+      <p class="text-[0.8125rem] font-semibold uppercase tracking-[.08em] text-brand-300">
+        Contato
+      </p>
+      <!-- APROVAR TEXTO -->
+      <h1 class="condensed mt-3 text-[clamp(2.25rem,5vw,4rem)] font-extrabold">
+        Fale com a Rosimaq
+      </h1>
+      <p class="mt-4 max-w-[65ch] text-lg text-ink-300">
+        O jeito mais rápido é o WhatsApp. Diga o equipamento e o endereço da obra.
+      </p>
+    </div>
+  </section>
+
+  <section
+    class="mx-auto grid max-w-[1200px] gap-6 px-4 py-12 md:grid-cols-2 md:px-6 lg:grid-cols-3"
+    aria-label="Canais de atendimento"
+  >
+    <article class="flex flex-col gap-4 rounded-[12px] border border-ink-200 bg-white p-6">
+      <h2 class="flex items-center gap-3 text-lg font-bold">
+        <Icon name="whatsapp" class="size-6" />
+        WhatsApp
+      </h2>
+      <p class="text-ink-500">Resposta com valores e disponibilidade.</p>
+      <div class="mt-auto">
+        <Button href={buildWhatsAppLink(GENERAL_MESSAGE)} icon="whatsapp" external>
+          Chamar no WhatsApp
+        </Button>
+      </div>
+    </article>
+
+    <article class="flex flex-col gap-4 rounded-[12px] border border-ink-200 bg-white p-6">
+      <h2 class="flex items-center gap-3 text-lg font-bold">
+        <Icon name="phone" class="size-6" />
+        Telefone
+      </h2>
+      <a
+        class="text-xl font-bold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-4"
+        href={company.phoneHref}
+      >
+        {company.phoneDisplay}
+      </a>
+    </article>
+
+    <article class="flex flex-col gap-4 rounded-[12px] border border-ink-200 bg-white p-6">
+      <h2 class="flex items-center gap-3 text-lg font-bold">
+        <Icon name="mail" class="size-6" />
+        E-mail
+      </h2>
+      <a
+        class="break-all text-lg font-semibold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-4"
+        href={`mailto:${company.email}`}
+      >
+        {company.email}
+      </a>
+    </article>
+
+    <article class="flex flex-col gap-4 rounded-[12px] border border-ink-200 bg-white p-6">
+      <h2 class="flex items-center gap-3 text-lg font-bold">
+        <Icon name="instagram" class="size-6" />
+        Instagram
+      </h2>
+      <a
+        class="text-lg font-semibold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-4"
+        href={company.instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        @rosimaq
+      </a>
+    </article>
+
+    <article class="flex flex-col gap-4 rounded-[12px] border border-ink-200 bg-white p-6">
+      <h2 class="flex items-center gap-3 text-lg font-bold">
+        <Icon name="map" class="size-6" />
+        Endereço
+      </h2>
+      <address class="not-italic text-ink-500">
+        {address.street}, {address.complement}
+        <br />
+        {address.district}
+        <br />
+        {address.city} · {address.state} · CEP {address.zip}
+      </address>
+      <div class="mt-auto">
+        <a
+          href={mapsHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-11 items-center gap-2 rounded-[12px] border border-ink-900 px-4 py-2 font-semibold text-ink-900 hover:bg-ink-900 hover:text-white"
+        >
+          Abrir no mapa<span class="sr-only"> (abre o Google Maps)</span>
+        </a>
+      </div>
+    </article>
+
+    <article class="flex flex-col gap-4 rounded-[12px] border border-ink-200 bg-white p-6">
+      <h2 class="flex items-center gap-3 text-lg font-bold">
+        <Icon name="clock" class="size-6" />
+        Horário
+      </h2>
+      <p class="text-ink-500">
+        {hours.days}, das {openHour}h às {closeHour}h.
+      </p>
+    </article>
+  </section>
+
+  <section class="bg-ink-100 py-[clamp(4rem,10vw,6rem)]" aria-labelledby="contato-regioes">
+    <div class="mx-auto max-w-[1200px] px-4 md:px-6">
+      <h2 id="contato-regioes" class="condensed text-[clamp(1.75rem,3.5vw,2.75rem)] font-extrabold">
+        Regiões atendidas
+      </h2>
+      <ul class="mt-8 flex flex-wrap gap-3">
+        {company.serviceArea.map((city) => (
+          <li class="rounded-[999px] border border-ink-300 bg-white px-5 py-3 font-bold text-ink-900">
+            {city}
+          </li>
+        ))}
+      </ul>
+      <p class="mt-6 max-w-[65ch] text-ink-500">Está em outra cidade? Consulte pelo WhatsApp.</p>
+    </div>
+  </section>
+</BaseLayout>
