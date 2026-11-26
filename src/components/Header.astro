@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/url';
 import { buildWhatsAppLink, GENERAL_MESSAGE } from '../lib/whatsapp';
 import Button from './Button.astro';
 import Icon from './Icon.astro';
@@ -6,11 +7,12 @@ import Logo from './Logo.astro';
 import OpenStatus from './OpenStatus.astro';
 
 const links = [
-  { href: '/', label: 'Início' },
-  { href: '/equipamentos', label: 'Equipamentos' },
-  { href: '/contato', label: 'Contato' },
+  { href: withBase('/'), label: 'Início' },
+  { href: withBase('/equipamentos'), label: 'Equipamentos' },
+  { href: withBase('/contato'), label: 'Contato' },
 ];
-const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const trimSlash = (path: string) => path.replace(/\/$/, '') || '/';
+const currentPath = trimSlash(Astro.url.pathname);
 const whatsapp = buildWhatsAppLink(GENERAL_MESSAGE);
 ---
 
@@ -26,7 +28,7 @@ const whatsapp = buildWhatsAppLink(GENERAL_MESSAGE);
           <li>
             <a
               href={link.href}
-              aria-current={currentPath === link.href ? 'page' : undefined}
+              aria-current={currentPath === trimSlash(link.href) ? 'page' : undefined}
               class="text-sm font-semibold text-ink-300 transition-colors hover:text-brand-300 aria-[current=page]:text-brand-300"
             >
               {link.label}
@@ -79,7 +81,7 @@ const whatsapp = buildWhatsAppLink(GENERAL_MESSAGE);
             <li>
               <a
                 href={link.href}
-                aria-current={currentPath === link.href ? 'page' : undefined}
+                aria-current={currentPath === trimSlash(link.href) ? 'page' : undefined}
                 class="block rounded-[12px] px-3 py-4 text-2xl font-extrabold uppercase text-white hover:bg-white/5 aria-[current=page]:text-brand-300"
                 style="font-stretch: 75%"
               >

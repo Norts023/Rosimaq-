@@ -1,4 +1,5 @@
 ---
+import { absoluteUrl, withBase } from '../lib/url';
 import { company } from '../data/company';
 
 interface Props {
@@ -10,8 +11,8 @@ interface Props {
 
 const { title, description, path = '/' } = Astro.props;
 // Base vem de astro.config (site). Nunca escrever o domínio fixo aqui.
-const canonical = new URL(path, Astro.site).href;
-const image = new URL('/og-image.jpg', Astro.site).href;
+const canonical = absoluteUrl(path, Astro.site);
+const image = absoluteUrl('/og-image.jpg', Astro.site);
 ---
 
 <title>{title}</title>
@@ -32,6 +33,6 @@ const image = new URL('/og-image.jpg', Astro.site).href;
 />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="theme-color" content="#111111" />
-<link rel="icon" href="/favicon.ico" sizes="32x32" />
-<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-<link rel="manifest" href="/site.webmanifest" />
+<link rel="icon" href={withBase('/favicon.ico')} sizes="32x32" />
+<link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+<link rel="manifest" href={withBase('/site.webmanifest')} />

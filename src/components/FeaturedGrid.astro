@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/url';
 import { featuredEquipment } from '../data/equipment';
 import EquipmentCard from './EquipmentCard.astro';
 ---
@@ -19,7 +20,7 @@ import EquipmentCard from './EquipmentCard.astro';
         </h2>
       </div>
       <a
-        href="/equipamentos"
+        href={withBase('/equipamentos')}
         class="inline-flex min-h-11 items-center font-semibold text-ink-900 underline decoration-brand-500 decoration-2 underline-offset-4 hover:decoration-4"
       >
         Ver catálogo completo

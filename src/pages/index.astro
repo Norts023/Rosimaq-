@@ -1,4 +1,5 @@
 ---
+import { absoluteUrl } from '../lib/url';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Benefits from '../components/Benefits.astro';
 import CategoryBento from '../components/CategoryBento.astro';
@@ -20,9 +21,9 @@ const structuredData = {
   legalName: company.legalName,
   telephone: `+${company.whatsapp}`,
   email: company.email,
-  url: new URL('/', Astro.site).href,
-  image: new URL('/og-image.jpg', Astro.site).href,
-  logo: new URL('/icon-512.png', Astro.site).href,
+  url: absoluteUrl('/', Astro.site),
+  image: absoluteUrl('/og-image.jpg', Astro.site),
+  logo: absoluteUrl('/icon-512.png', Astro.site),
   address: {
     '@type': 'PostalAddress',
     streetAddress: `${company.address.street}, ${company.address.complement}`,

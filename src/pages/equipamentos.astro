@@ -1,4 +1,5 @@
 ---
+import { absoluteUrl } from '../lib/url';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import CategoryFilter from '../components/CategoryFilter.astro';
 import EquipmentCard from '../components/EquipmentCard.astro';
@@ -19,7 +20,7 @@ const itemList = {
     '@type': 'ListItem',
     position: index + 1,
     name: item.name,
-    url: new URL(`/equipamentos#${item.id}`, Astro.site).href,
+    url: absoluteUrl(`/equipamentos#${item.id}`, Astro.site),
   })),
 };
 ---

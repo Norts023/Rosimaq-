@@ -1,4 +1,5 @@
 ---
+import { withBase } from '../lib/url';
 import { company } from '../data/company';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
@@ -19,16 +20,16 @@ const closeHour = Number(company.hours.close.split(':')[0]);
     </div>
 
     <nav aria-label="Rodapé" class="flex flex-col gap-3 text-base">
-      <a class="w-fit hover:text-brand-300" href="/">
+      <a class="w-fit hover:text-brand-300" href={withBase('/')}>
         Início
       </a>
-      <a class="w-fit hover:text-brand-300" href="/equipamentos">
+      <a class="w-fit hover:text-brand-300" href={withBase('/equipamentos')}>
         Equipamentos
       </a>
-      <a class="w-fit hover:text-brand-300" href="/contato">
+      <a class="w-fit hover:text-brand-300" href={withBase('/contato')}>
         Contato
       </a>
-      <a class="w-fit hover:text-brand-300" href="/privacidade">
+      <a class="w-fit hover:text-brand-300" href={withBase('/privacidade')}>
         Política de privacidade
       </a>
     </nav>

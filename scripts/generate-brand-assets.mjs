@@ -126,13 +126,13 @@ async function main() {
   const manifest = {
     name: 'Rosimaq Locação de Equipamentos',
     short_name: 'Rosimaq',
-    start_url: '/',
+    start_url: './',
     display: 'standalone',
     theme_color: BG_HEX,
     background_color: BG_HEX,
     icons: [
-      { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
-      { src: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+      { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
+      { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
   };
   await writeFile(join(PUBLIC, 'site.webmanifest'), JSON.stringify(manifest, null, 2) + '\n');

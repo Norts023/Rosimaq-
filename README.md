@@ -43,11 +43,12 @@ Para rodar os testes e2e localmente pela primeira vez, instale o navegador do Pl
 
 ## Variável de ambiente
 
-| Variável          | Padrão                    | Uso                                                                                                   |
-| ----------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `PUBLIC_SITE_URL` | `https://www.rosimaq.com` | URL base do site. Usada em `astro.config` para canonical, Open Graph, sitemap, `robots.txt` e JSON-LD |
+| Variável          | Padrão                    | Uso                                                                                                                                                |
+| ----------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_SITE_URL` | `https://www.rosimaq.com` | URL pública do site. A origem vai para `site` e o caminho (se houver) para `base`. Usada em canonical, Open Graph, sitemap, `robots.txt` e JSON-LD |
 
-Os componentes nunca escrevem o domínio fixo. Para mudar de domínio, defina `PUBLIC_SITE_URL` no build
+Os componentes nunca escrevem o domínio nem o caminho fixo: rotas internas passam por `withBase`
+(`src/lib/url.ts`) e URLs absolutas por `absoluteUrl`. Para mudar de domínio, defina `PUBLIC_SITE_URL` no build
 e gere o site de novo. Não há segredos no projeto.
 
 ## Conteúdo
@@ -66,7 +67,19 @@ Depois de trocar o logo, rode `pnpm brand` para regenerar os ícones e a imagem 
 - **Títulos principais:** marcados com `<!-- APROVAR TEXTO -->`, aguardando aprovação.
 - **Política de privacidade:** marcada com `<!-- REVISAR COM A ROSIMARQ -->`.
 
-## Deploy
+## Publicação atual: GitHub Pages
+
+O site está publicado em **https://norts023.github.io/Rosimaq-/** pelo workflow
+`.github/workflows/pages.yml`, que roda a cada push na `main`. Ele define
+`PUBLIC_SITE_URL=https://norts023.github.io/Rosimaq-`, então o site usa o caminho `/Rosimaq-/`.
+
+- Para ativar: em Settings → Pages, a fonte deve ser **GitHub Actions** (o workflow tenta ativar sozinho).
+- O GitHub Pages não lê o arquivo `_headers`, então a Content-Security-Policy e os cabeçalhos de segurança
+  não são aplicados nessa publicação. Eles valem quando o site for para Netlify ou Cloudflare Pages.
+- Quando a Rosimaq tiver domínio próprio, troque `PUBLIC_SITE_URL` no workflow (ou defina a variável no repositório)
+  e publique de novo.
+
+## Deploy em outros provedores
 
 O site é 100% estático e funciona em qualquer hospedagem de arquivos estáticos. O provedor será escolhido
 e contratado pela Rosimaq. Em todos os casos, a publicação é:
