@@ -378,7 +378,7 @@ function enter(state: RosiState, step: StepId, ctx: RosiContext, pre: string[] =
 function goBack(state: RosiState, ctx: RosiContext): RosiState {
   const previous = state.history[state.history.length - 1];
   if (!previous) return state;
-  let next = userSay({ ...state, step: previous, history: state.history.slice(0, -1) }, 'Voltar');
+  const next = userSay({ ...state, step: previous, history: state.history.slice(0, -1) }, 'Voltar');
   return say(next, promptFor(next, ctx));
 }
 
