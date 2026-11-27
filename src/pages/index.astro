@@ -49,7 +49,10 @@ const structuredData = {
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </Fragment>
   <Hero />
-  <Blend from="#111111" to="#FAFAF8" height="4rem" />
+  <Blend
+    stops="#111111 0%, #111111 10%, #1d180b 30%, #4a3a06 52%, #a88418 74%, #ecd58a 90%, #faf6ea 100%"
+    height="12rem"
+  />
   <Benefits />
   <CategoryBento />
   <FeaturedGrid />

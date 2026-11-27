@@ -13,7 +13,10 @@ const closeHour = Number(company.hours.close.split(':')[0]);
 ---
 
 <footer class="bg-ink-900 pb-24 text-ink-300 md:pb-0">
-  <Blend from="#FAFAF8" to="#111111" height="4rem" />
+  <Blend
+    stops="#faf6ea 0%, #ecd58a 10%, #a88418 26%, #4a3a06 48%, #1d180b 70%, #111111 90%, #111111 100%"
+    height="12rem"
+  />
   <div class="mx-auto grid max-w-[1200px] gap-10 px-4 py-16 md:grid-cols-3 md:px-6">
     <div class="flex flex-col gap-4">
       <Logo />

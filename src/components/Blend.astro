@@ -1,17 +1,21 @@
 ---
 interface Props {
-  /** Cor de cima (CSS). */
-  from: string;
-  /** Cor de baixo (CSS). */
-  to: string;
+  /** Cor de cima (CSS). Usada se `stops` não for informado. */
+  from?: string;
+  /** Cor de baixo (CSS). Usada se `stops` não for informado. */
+  to?: string;
+  /** Paradas do degradê, como em `linear-gradient` (ex.: "#111 0%, #6b5000 60%, #fff 100%"). */
+  stops?: string;
   height?: string;
 }
-// Faixa de degradê entre duas seções: troca a quebra seca por uma transição suave.
-const { from, to, height = '5rem' } = Astro.props;
+// Faixa de transição entre duas seções. Com várias paradas, evita o cinza que surge
+// ao misturar duas cores diretamente (preto com branco, por exemplo).
+const { from = '#111111', to = '#FAFAF8', stops, height = '5rem' } = Astro.props;
+const background = `linear-gradient(180deg, ${stops ?? `${from} 0%, ${to} 100%`})`;
 ---
 
 <div
   aria-hidden="true"
   class="pointer-events-none w-full"
-  style={`height:${height};background:linear-gradient(180deg, ${from} 0%, ${to} 100%)`}
+  style={`height:${height};background:${background}`}
 ></div>
