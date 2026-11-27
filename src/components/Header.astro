@@ -1,6 +1,7 @@
 ---
 import { withBase } from '../lib/url';
 import { buildWhatsAppLink, GENERAL_MESSAGE } from '../lib/whatsapp';
+import { company } from '../data/company';
 import Button from './Button.astro';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
@@ -60,41 +61,177 @@ const whatsapp = buildWhatsAppLink(GENERAL_MESSAGE);
 
   <dialog
     data-menu
-    class="m-0 ml-auto h-dvh max-h-none w-[min(88vw,360px)] bg-ink-900 p-0 text-white backdrop:bg-black/60"
+    class="sidebar m-0 ml-auto h-dvh max-h-none w-[min(88vw,380px)] overflow-hidden bg-transparent p-0 text-white backdrop:bg-black/60 backdrop:backdrop-blur-sm"
     aria-label="Menu"
   >
-    <div class="flex h-full flex-col gap-8 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+    <div class="sidebar__panel relative flex h-full flex-col gap-7 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
       <div class="flex items-center justify-between">
         <Logo />
         <button
           type="button"
-          class="inline-flex size-12 items-center justify-center rounded-[12px]"
+          class="sidebar__close inline-flex size-12 items-center justify-center rounded-[12px] transition duration-200 hover:bg-white/10"
           aria-label="Fechar menu"
           data-menu-close
         >
           <Icon name="close" class="size-6" />
         </button>
       </div>
+
       <nav aria-label="Principal (celular)">
-        <ul class="flex flex-col gap-2">
-          {links.map((link) => (
-            <li>
-              <a
-                href={link.href}
-                aria-current={currentPath === trimSlash(link.href) ? 'page' : undefined}
-                class="block rounded-[12px] px-3 py-4 text-2xl font-extrabold uppercase text-white hover:bg-white/5 aria-[current=page]:text-brand-300"
-                style="font-stretch: 75%"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
+        <ul class="flex flex-col">
+          {links.map((link, i) => {
+            const current = currentPath === trimSlash(link.href);
+            return (
+              <li class="sidebar__item" style={`--i:${i}`}>
+                <a
+                  href={link.href}
+                  aria-current={current ? 'page' : undefined}
+                  class="sidebar__link group flex items-center gap-4 rounded-[12px] px-3 py-4"
+                >
+                  <span class="sidebar__index text-sm font-bold text-brand-500" aria-hidden="true">
+                    0{i + 1}
+                  </span>
+                  <span class="sidebar__label condensed flex-1 text-[clamp(1.75rem,7vw,2.25rem)] font-extrabold">
+                    {link.label}
+                  </span>
+                  <span class="sidebar__arrow" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </nav>
-      <Button href={whatsapp} icon="whatsapp" external>
-        Pedir orçamento no WhatsApp
-      </Button>
+
+      <div class="mt-auto flex flex-col gap-5">
+        <OpenStatus />
+        <div class="flex flex-col gap-2 text-sm">
+          <a href={company.phoneHref} class="sidebar__contact">
+            <Icon name="phone" class="size-5" />
+            <span>{company.phoneDisplay}</span>
+          </a>
+          <a href={`mailto:${company.email}`} class="sidebar__contact">
+            <Icon name="mail" class="size-5" />
+            <span class="truncate">{company.email}</span>
+          </a>
+          <a
+            href={company.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="sidebar__contact"
+          >
+            <Icon name="instagram" class="size-5" />
+            <span>@rosimaq</span>
+          </a>
+          <a href={withBase('/contato')} class="sidebar__contact">
+            <Icon name="map" class="size-5" />
+            <span>Como chegar</span>
+          </a>
+        </div>
+        <Button href={whatsapp} icon="whatsapp" external>
+          Pedir orçamento no WhatsApp
+        </Button>
+      </div>
     </div>
+
+    <style>
+      .sidebar {
+        background: #111111;
+      }
+      .sidebar__panel {
+        background:
+          radial-gradient(circle at 100% 0%, rgba(245, 184, 0, 0.14), transparent 55%),
+          linear-gradient(180deg, #1c1c1c 0%, #111111 100%);
+      }
+      .sidebar__item {
+        opacity: 0;
+        transform: translateX(16px);
+      }
+      .sidebar[open] .sidebar__item {
+        animation: sidebar-in 420ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+        animation-delay: calc(120ms + var(--i) * 60ms);
+      }
+      @keyframes sidebar-in {
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .sidebar__link {
+        position: relative;
+        overflow: hidden;
+        transition: background 200ms ease;
+      }
+      .sidebar__link::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 12%;
+        bottom: 12%;
+        width: 3px;
+        border-radius: 3px;
+        background: var(--color-brand-500);
+        transform: scaleY(0);
+        transition: transform 250ms ease;
+      }
+      .sidebar__link:hover,
+      .sidebar__link:focus-visible {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .sidebar__link:hover::before,
+      .sidebar__link:focus-visible::before {
+        transform: scaleY(1);
+      }
+      .sidebar__link[aria-current='page'] {
+        background: rgba(245, 184, 0, 0.1);
+      }
+      .sidebar__link[aria-current='page'] .sidebar__label {
+        color: var(--color-brand-300);
+      }
+      .sidebar__arrow {
+        opacity: 0;
+        transform: translateX(-8px);
+        color: var(--color-brand-500);
+        transition:
+          opacity 200ms ease,
+          transform 250ms ease;
+      }
+      .sidebar__link:hover .sidebar__arrow,
+      .sidebar__link:focus-visible .sidebar__arrow {
+        opacity: 1;
+        transform: none;
+      }
+      .sidebar__contact {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 48px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 10px 12px;
+        color: #bbbbbb;
+        transition:
+          border-color 200ms ease,
+          color 200ms ease;
+      }
+      .sidebar__contact:hover {
+        border-color: var(--color-brand-500);
+        color: #ffffff;
+      }
+      .sidebar__contact span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .sidebar[open] .sidebar__item {
+          animation: none;
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
   </dialog>
 </header>
 
