@@ -25,21 +25,24 @@ const itemList = {
 };
 ---
 
-<BaseLayout title={title} description={description} path="/equipamentos">
+<BaseLayout
+  title={title}
+  description={description}
+  path="/equipamentos"
+  mainStyle="background: var(--gradient-page-light)"
+>
   <Fragment slot="head">
     <script type="application/ld+json" set:html={JSON.stringify(itemList)} />
   </Fragment>
 
-  <section class="bg-ink-900 pb-12 pt-14 text-white md:pt-20">
+  <section class="pb-12 pt-14 text-ink-900 md:pt-20">
     <div class="mx-auto max-w-[1200px] px-4 md:px-6">
-      <p class="text-[0.8125rem] font-semibold uppercase tracking-[.08em] text-brand-300">
-        Catálogo
-      </p>
+      <p class="text-[0.8125rem] font-semibold uppercase tracking-[.08em] text-ink-500">Catálogo</p>
       <!-- APROVAR TEXTO -->
       <h1 class="condensed mt-3 text-[clamp(2.25rem,5vw,4rem)] font-extrabold">
         Equipamentos para a sua obra
       </h1>
-      <p class="mt-4 max-w-[65ch] text-lg text-ink-300">
+      <p class="mt-4 max-w-[65ch] text-lg text-ink-500">
         Escolha a categoria ou busque pelo nome. Para valores e disponibilidade, chame a gente no
         WhatsApp.
       </p>
