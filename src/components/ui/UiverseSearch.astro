@@ -1,0 +1,322 @@
+---
+/*
+From Uiverse.io by Lakshay-art - https://uiverse.io/Lakshay-art/curvy-earwig-22
+MIT License, Copyright (c) Lakshay-art (Lakshay Gupta)
+*/
+interface Props {
+  /** Id e name do campo. Obrigatório, porque o rótulo precisa estar ligado ao campo. */
+  id: string;
+  /** Rótulo visível para leitores de tela (o campo tem o visual de busca, sem rótulo na tela). */
+  label: string;
+  placeholder?: string;
+}
+const { id, label, placeholder = 'Buscar...' } = Astro.props;
+---
+
+<div class="ui-search">
+  <label for={id} class="sr-only">
+    {label}
+  </label>
+  <div class="ui-search__glow" aria-hidden="true"></div>
+  <div class="ui-search__border-bg" aria-hidden="true"></div>
+  <div class="ui-search__border-bg" aria-hidden="true"></div>
+  <div class="ui-search__border-bg" aria-hidden="true"></div>
+  <div class="ui-search__white" aria-hidden="true"></div>
+  <div class="ui-search__border" aria-hidden="true"></div>
+  <div class="ui-search__main">
+    <input
+      id={id}
+      name={id}
+      type="search"
+      placeholder={placeholder}
+      class="ui-search__input"
+      autocomplete="off"
+    />
+    <div class="ui-search__input-mask" aria-hidden="true"></div>
+    <div class="ui-search__pink-mask" aria-hidden="true"></div>
+    <div class="ui-search__filter-border" aria-hidden="true"></div>
+    <div class="ui-search__filter-icon" aria-hidden="true">
+      <svg
+        preserveAspectRatio="none"
+        height="27"
+        width="27"
+        viewBox="4.8 4.56 14.832 15.408"
+        fill="none"
+      >
+        <path
+          d="M8.16 6.65002H15.83C16.47 6.65002 16.99 7.17002 16.99 7.81002V9.09002C16.99 9.56002 16.7 10.14 16.41 10.43L13.91 12.64C13.56 12.93 13.33 13.51 13.33 13.98V16.48C13.33 16.83 13.1 17.29 12.81 17.47L12 17.98C11.24 18.45 10.2 17.92 10.2 16.99V13.91C10.2 13.5 9.97 12.98 9.73 12.69L7.52 10.36C7.23 10.08 7 9.55002 7 9.20002V7.87002C7 7.17002 7.52 6.65002 8.16 6.65002Z"
+          stroke="#d6d6e6"
+          stroke-width="1"
+          stroke-miterlimit="10"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        ></path>
+      </svg>
+    </div>
+    <div class="ui-search__search-icon" aria-hidden="true">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke-linejoin="round"
+        stroke-linecap="round"
+        height="24"
+        fill="none"
+      >
+        <circle stroke="url(#ui-search-grad)" r="8" cy="11" cx="11"></circle>
+        <line stroke="url(#ui-search-grad-line)" y2="16.65" y1="22" x2="16.65" x1="22"></line>
+        <defs>
+          <linearGradient gradientTransform="rotate(50)" id="ui-search-grad">
+            <stop stop-color="#f8e7f8" offset="0%"></stop>
+            <stop stop-color="#b6a9b7" offset="50%"></stop>
+          </linearGradient>
+          <linearGradient id="ui-search-grad-line">
+            <stop stop-color="#b6a9b7" offset="0%"></stop>
+            <stop stop-color="#837484" offset="50%"></stop>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ui-search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 314px;
+    max-width: 100%;
+  }
+  .ui-search__glow,
+  .ui-search__white,
+  .ui-search__border,
+  .ui-search__border-bg {
+    max-height: 70px;
+    max-width: 314px;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    z-index: -1;
+    border-radius: 12px;
+    filter: blur(3px);
+  }
+  .ui-search__input {
+    background-color: #010201;
+    border: none;
+    width: 301px;
+    max-width: calc(100% - 13px);
+    height: 56px;
+    border-radius: 10px;
+    color: white;
+    padding-inline: 59px;
+    font-size: 18px;
+  }
+  .ui-search__input::placeholder {
+    color: #c0b9c0;
+  }
+  .ui-search__input:focus {
+    outline: none;
+  }
+  .ui-search__main {
+    position: relative;
+  }
+  .ui-search__main:focus-within > .ui-search__input-mask {
+    display: none;
+  }
+  .ui-search__input-mask {
+    pointer-events: none;
+    width: 100px;
+    height: 20px;
+    position: absolute;
+    background: linear-gradient(90deg, transparent, black);
+    top: 18px;
+    left: 70px;
+  }
+  .ui-search__pink-mask {
+    pointer-events: none;
+    width: 30px;
+    height: 20px;
+    position: absolute;
+    background: #cf30aa;
+    top: 10px;
+    left: 5px;
+    filter: blur(20px);
+    opacity: 0.8;
+    transition: all 2s;
+  }
+  .ui-search__main:hover > .ui-search__pink-mask {
+    opacity: 0;
+  }
+  .ui-search__white {
+    max-height: 63px;
+    max-width: 307px;
+    border-radius: 10px;
+    filter: blur(2px);
+  }
+  .ui-search__border {
+    max-height: 59px;
+    max-width: 303px;
+    border-radius: 11px;
+    filter: blur(0.5px);
+  }
+  .ui-search__border-bg {
+    max-height: 65px;
+    max-width: 312px;
+  }
+  .ui-search__glow {
+    overflow: hidden;
+    filter: blur(30px);
+    opacity: 0.4;
+    max-height: 130px;
+    max-width: 354px;
+  }
+  .ui-search__white::before,
+  .ui-search__border::before,
+  .ui-search__border-bg::before,
+  .ui-search__glow::before {
+    content: '';
+    z-index: -2;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    transition: all 2s;
+  }
+  .ui-search__glow::before {
+    width: 999px;
+    height: 999px;
+    transform: translate(-50%, -50%) rotate(60deg);
+    background-image: conic-gradient(#000, #402fb5 5%, #000 38%, #000 50%, #cf30aa 60%, #000 87%);
+  }
+  .ui-search__white::before {
+    transform: translate(-50%, -50%) rotate(83deg);
+    filter: brightness(1.4);
+    background-image: conic-gradient(
+      rgba(0, 0, 0, 0) 0%,
+      #a099d8,
+      rgba(0, 0, 0, 0) 8%,
+      rgba(0, 0, 0, 0) 50%,
+      #dfa2da,
+      rgba(0, 0, 0, 0) 58%
+    );
+  }
+  .ui-search__border::before {
+    transform: translate(-50%, -50%) rotate(70deg);
+    filter: brightness(1.3);
+    background-image: conic-gradient(
+      #1c191c,
+      #402fb5 5%,
+      #1c191c 14%,
+      #1c191c 50%,
+      #cf30aa 60%,
+      #1c191c 64%
+    );
+  }
+  .ui-search__border-bg::before {
+    transform: translate(-50%, -50%) rotate(82deg);
+    background-image: conic-gradient(
+      rgba(0, 0, 0, 0),
+      #18116a,
+      rgba(0, 0, 0, 0) 10%,
+      rgba(0, 0, 0, 0) 50%,
+      #6e1b60,
+      rgba(0, 0, 0, 0) 60%
+    );
+  }
+  /* Movimento das bordas no hover e no foco (o último valor de cada regra é o que vale). */
+  .ui-search:hover > .ui-search__border-bg::before {
+    transform: translate(-50%, -50%) rotate(-98deg);
+  }
+  .ui-search:hover > .ui-search__glow::before {
+    transform: translate(-50%, -50%) rotate(-120deg);
+  }
+  .ui-search:hover > .ui-search__white::before {
+    transform: translate(-50%, -50%) rotate(-97deg);
+  }
+  .ui-search:hover > .ui-search__border::before {
+    transform: translate(-50%, -50%) rotate(-110deg);
+  }
+  .ui-search:focus-within > .ui-search__border-bg::before {
+    transform: translate(-50%, -50%) rotate(442deg);
+    transition: all 4s;
+  }
+  .ui-search:focus-within > .ui-search__glow::before {
+    transform: translate(-50%, -50%) rotate(420deg);
+    transition: all 4s;
+  }
+  .ui-search:focus-within > .ui-search__white::before {
+    transform: translate(-50%, -50%) rotate(443deg);
+    transition: all 4s;
+  }
+  .ui-search:focus-within > .ui-search__border::before {
+    transform: translate(-50%, -50%) rotate(430deg);
+    transition: all 4s;
+  }
+  .ui-search__filter-icon {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    max-height: 40px;
+    max-width: 38px;
+    height: 100%;
+    width: 100%;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #161329, black, #1d1b4b);
+    border: 1px solid transparent;
+  }
+  .ui-search__filter-border {
+    height: 42px;
+    width: 40px;
+    position: absolute;
+    overflow: hidden;
+    top: 7px;
+    right: 7px;
+    border-radius: 10px;
+  }
+  .ui-search__filter-border::before {
+    content: '';
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    filter: brightness(1.35);
+    background-image: conic-gradient(
+      rgba(0, 0, 0, 0),
+      #3d3a4f,
+      rgba(0, 0, 0, 0) 50%,
+      rgba(0, 0, 0, 0) 50%,
+      #3d3a4f,
+      rgba(0, 0, 0, 0) 100%
+    );
+    animation: ui-search-rotate 4s linear infinite;
+  }
+  .ui-search__search-icon {
+    position: absolute;
+    left: 20px;
+    top: 15px;
+  }
+  @keyframes ui-search-rotate {
+    100% {
+      transform: translate(-50%, -50%) rotate(450deg);
+    }
+  }
+</style>
