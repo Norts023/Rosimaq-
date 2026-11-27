@@ -79,17 +79,6 @@ const cards = [
             </button>
           ))}
         </div>
-        <button
-          type="button"
-          class="hero-pause inline-flex min-h-11 items-center gap-2 rounded-[999px] border border-white/25 px-4 text-sm font-semibold text-white hover:border-brand-500 hover:text-brand-300"
-          data-pause
-          aria-pressed="false"
-        >
-          <span aria-hidden="true" class="hero-pause__icon">
-            ❚❚
-          </span>
-          <span class="hero-pause__label">Pausar títulos</span>
-        </button>
       </div>
       <p class="max-w-[65ch] text-lg text-ink-300">
         Locação de betoneira, martelete, andaime e mais equipamentos para a sua obra. Peça o
@@ -216,9 +205,7 @@ const cards = [
     if (phrases.length < 2 || !controls) return;
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const pause = section.querySelector<HTMLButtonElement>('[data-pause]');
     let index = 0;
-    let paused = reduce;
 
     const show = (next: number) => {
       index = next;
@@ -229,17 +216,6 @@ const cards = [
     // Sem JavaScript os controles ficam ocultos; com JavaScript aparecem.
     controls.hidden = false;
 
-    const setPaused = (value: boolean) => {
-      paused = value;
-      if (!pause) return;
-      pause.setAttribute('aria-pressed', String(value));
-      const label = pause.querySelector('.hero-pause__label');
-      const icon = pause.querySelector('.hero-pause__icon');
-      if (label) label.textContent = value ? 'Continuar títulos' : 'Pausar títulos';
-      if (icon) icon.textContent = value ? '▶' : '❚❚';
-    };
-    pause?.addEventListener('click', () => setPaused(!paused));
-    setPaused(paused);
     dots.forEach((dot) => {
       dot.addEventListener('click', () => show(Number(dot.dataset.dot)));
     });
@@ -249,7 +225,7 @@ const cards = [
     // Um único temporizador por vez: a navegação recria o hero.
     if (timer !== undefined) window.clearInterval(timer);
     timer = window.setInterval(() => {
-      if (paused) return;
+      if (reduce) return;
       show((index + 1) % phrases.length);
     }, INTERVAL_MS);
   }
