@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import Icon from '../components/Icon.astro';
+import UiverseSocial from '../components/ui/UiverseSocial.astro';
 import { company } from '../data/company';
 import { buildWhatsAppLink, GENERAL_MESSAGE } from '../lib/whatsapp';
 
@@ -29,6 +30,9 @@ const closeHour = Number(hours.close.split(':')[0]);
       <p class="mt-4 max-w-[65ch] text-lg text-ink-300">
         O jeito mais rápido é o WhatsApp. Diga o equipamento e o endereço da obra.
       </p>
+      <div class="mt-8">
+        <UiverseSocial />
+      </div>
     </div>
   </section>
 
