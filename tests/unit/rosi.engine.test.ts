@@ -92,6 +92,21 @@ describe('roteiro principal', () => {
   });
 });
 
+describe('recomendações', () => {
+  it('escolher uma categoria depois de uma tarefa não repete a recomendação anterior', () => {
+    let s = createState(ctx);
+    s = pick(s, 'help');
+    s = pick(s, 'task:quebrar');
+    s = pick(s, 'eq:martelete-rompedor-5kg');
+    s = pick(s, 'qty:1');
+    s = pick(s, 'add-more');
+    s = pick(s, 'cat:pintura');
+    const ids = optionsFor(s, ctx).map((o) => o.id);
+    expect(ids).toContain('eq:maquina-pintura');
+    expect(ids).not.toContain('eq:martelete-rompedor-5kg');
+  });
+});
+
 describe('voltar e recomeçar', () => {
   it('"Voltar" retorna à etapa anterior sem perder o que já foi respondido', () => {
     let s = createState(ctx);
