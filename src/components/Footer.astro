@@ -1,6 +1,7 @@
 ---
 import { withBase } from '../lib/url';
 import { company } from '../data/company';
+import Blend from './Blend.astro';
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
 import OpenStatus from './OpenStatus.astro';
@@ -11,7 +12,8 @@ const openHour = Number(company.hours.open.split(':')[0]);
 const closeHour = Number(company.hours.close.split(':')[0]);
 ---
 
-<footer class="border-t border-white/10 bg-ink-900 pb-24 text-ink-300 md:pb-0">
+<footer class="bg-gradient-to-b from-ink-900 via-ink-900 to-[#0b0b0b] pb-24 text-ink-300 md:pb-0">
+  <Blend from="#FAFAF8" to="#111111" height="4rem" />
   <div class="mx-auto grid max-w-[1200px] gap-10 px-4 py-16 md:grid-cols-3 md:px-6">
     <div class="flex flex-col gap-4">
       <Logo />
@@ -69,7 +71,7 @@ const closeHour = Number(company.hours.close.split(':')[0]);
       </p>
     </div>
   </div>
-  <div class="border-t border-white/10">
+  <div>
     <p class="mx-auto max-w-[1200px] px-4 py-6 text-xs md:px-6">
       © {year} {company.legalName.replace('LOCACAO', 'Locação').replace('CONSTRUCAO', 'Construção')}{' '}
       · CNPJ {company.cnpj}
