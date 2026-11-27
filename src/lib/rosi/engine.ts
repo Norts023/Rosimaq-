@@ -327,7 +327,10 @@ export function optionsFor(state: RosiState, ctx: RosiContext): Option[] {
       case 'ask-notes':
         return [{ id: 'notes-skip', label: 'Não, tudo certo' }];
       case 'summary':
-        return [{ id: 'add', label: 'Adicionar outro equipamento' }];
+        return [
+          { id: 'add', label: 'Adicionar outro equipamento' },
+          { id: 'send', label: 'Enviar pedido no WhatsApp' },
+        ];
       case 'faq-menu':
         return faqTopics.map((topic) => ({ id: `faq:${topic.id}`, label: topic.label }));
       case 'faq-next': {
@@ -582,6 +585,7 @@ function handleOption(state: RosiState, id: string, ctx: RosiContext): RosiState
       break;
     case 'summary':
       if (id === 'add') return enter({ ...state, editing: true }, 'pick-category', ctx);
+      if (id === 'send' && state.items.length > 0) return enter(state, 'sent', ctx);
       break;
     case 'faq-menu':
       if (head === 'faq') return faqAction(state, value, ctx);
@@ -674,6 +678,17 @@ export function summaryLines(state: RosiState, ctx: RosiContext): SummaryLine[] 
     { label: 'Entrega', value: deliveryLabel, edit: 'ask-delivery' },
     { label: 'Observação', value: state.notes ?? 'nenhuma', edit: 'ask-notes' },
   ];
+}
+
+/** Abre a conversa já com um equipamento escolhido (botão "Adicionar ao pedido com a Rosi"). */
+export function startWithEquipment(
+  state: RosiState,
+  equipmentId: string,
+  ctx: RosiContext,
+): RosiState {
+  const name = ctx.equipment.find((item) => item.id === equipmentId)?.name ?? equipmentId;
+  const withUser = userSay(state, `Quero adicionar: ${name}`);
+  return enter({ ...withUser, pendingEquipment: equipmentId }, 'ask-quantity', ctx);
 }
 
 export const ROSI_LIMITS = { MIN_QTY, MAX_QTY, MAX_NAME, MAX_CITY, MAX_NOTES, MAX_PERIOD };

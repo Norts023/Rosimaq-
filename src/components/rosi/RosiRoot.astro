@@ -1,0 +1,471 @@
+---
+import { getOpenStatus } from '../../lib/openStatus';
+import { withBase } from '../../lib/url';
+import RosiAvatar from './RosiAvatar.astro';
+
+// Estado de abertura calculado no build, como fallback. O cliente atualiza ao abrir.
+const status = getOpenStatus();
+---
+
+<div data-rosi-root class="rosi" transition:persist="rosi-root">
+  <div data-rosi-balloon hidden class="rosi-balloon" role="status">
+    <p>Precisa de ajuda para escolher? Posso te ajudar 🙂</p>
+    <button
+      type="button"
+      class="rosi-balloon__close"
+      aria-label="Fechar aviso"
+      data-rosi-balloon-close
+    >
+      ×
+    </button>
+  </div>
+
+  <button
+    type="button"
+    class="rosi-launcher"
+    data-rosi-open
+    aria-haspopup="dialog"
+    aria-controls="rosi-panel"
+  >
+    <RosiAvatar class="size-11" />
+    <span class="rosi-launcher__label">Fale com a Rosi</span>
+    <span class="sr-only">Abrir a assistente Rosi</span>
+  </button>
+
+  <dialog id="rosi-panel" class="rosi-panel" data-rosi-dialog aria-labelledby="rosi-title">
+    <div class="rosi-panel__inner">
+      <header class="rosi-panel__head">
+        <RosiAvatar class="size-11 shrink-0" />
+        <div class="min-w-0 flex-1">
+          <h2 id="rosi-title" class="text-base font-extrabold leading-tight">
+            Rosi
+          </h2>
+          <p class="text-xs text-ink-300">Assistente da Rosimaq</p>
+          <span class="rosi-status" data-rosi-status>
+            {status.label}
+          </span>
+        </div>
+        <button type="button" class="rosi-head-btn" data-rosi-restart>
+          Recomeçar
+        </button>
+        <button type="button" class="rosi-head-btn" data-rosi-close aria-label="Fechar a Rosi">
+          Fechar
+        </button>
+      </header>
+
+      <div class="rosi-panel__body">
+        <ol class="rosi-messages" data-rosi-messages aria-live="polite"></ol>
+        <p class="rosi-typing" data-rosi-typing hidden>
+          Rosi está digitando…
+        </p>
+        <div data-rosi-extra></div>
+        <div class="rosi-options" data-rosi-options></div>
+      </div>
+
+      <footer class="rosi-panel__foot">
+        <form data-rosi-form class="rosi-form">
+          <label for="rosi-input" class="sr-only">
+            Digite sua dúvida
+          </label>
+          <input
+            id="rosi-input"
+            name="text"
+            type="text"
+            class="rosi-input"
+            autocomplete="off"
+            maxlength="300"
+            placeholder="Digite sua dúvida…"
+          />
+          <button type="submit" class="rosi-send">
+            Enviar
+          </button>
+        </form>
+        <a
+          class="rosi-whats"
+          data-rosi-whats
+          href={withBase('/contato')}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Falar direto no WhatsApp
+        </a>
+      </footer>
+    </div>
+  </dialog>
+</div>
+
+<style is:global>
+  .rosi {
+    position: relative;
+    z-index: 60;
+  }
+  .rosi-launcher {
+    position: fixed;
+    right: 1rem;
+    bottom: calc(5.5rem + env(safe-area-inset-bottom));
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 3.75rem;
+    min-width: 3.75rem;
+    padding: 0 0.75rem;
+    border-radius: 999px;
+    background: var(--color-brand-500);
+    color: var(--color-ink-900);
+    box-shadow: 0 14px 30px -14px rgba(17, 17, 17, 0.6);
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease;
+  }
+  .rosi-launcher:hover,
+  .rosi-launcher:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 36px -14px rgba(17, 17, 17, 0.7);
+  }
+  .rosi-launcher__label {
+    display: none;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  @media (min-width: 768px) {
+    .rosi-launcher {
+      right: 1.5rem;
+      bottom: 1.5rem;
+    }
+    .rosi-launcher:hover .rosi-launcher__label {
+      display: inline;
+    }
+  }
+  .rosi-balloon {
+    position: fixed;
+    right: 1rem;
+    bottom: calc(10.25rem + env(safe-area-inset-bottom));
+    max-width: 16rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    padding: 0.75rem 0.75rem 0.75rem 1rem;
+    border-radius: 12px;
+    background: #ffffff;
+    color: var(--color-ink-900);
+    box-shadow: 0 14px 30px -18px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--color-ink-200);
+    font-size: 0.9rem;
+  }
+  .rosi-balloon p {
+    margin: 0;
+  }
+  .rosi-balloon__close {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    margin: -0.5rem -0.5rem 0 0;
+    font-size: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .rosi-balloon {
+      bottom: 6.5rem;
+    }
+  }
+  .rosi-panel {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+  .rosi-panel::backdrop {
+    background: rgba(17, 17, 17, 0.45);
+  }
+  .rosi-panel[open] {
+    position: fixed;
+    inset: 0;
+  }
+  @media (min-width: 768px) {
+    .rosi-panel {
+      width: 380px;
+      height: min(600px, calc(100dvh - 8rem));
+      max-height: none;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.5);
+    }
+    .rosi-panel[open] {
+      position: fixed;
+      margin: 0;
+      inset: auto 1.5rem 6rem auto;
+    }
+  }
+  .rosi-panel__inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #fafaf8;
+    color: var(--color-ink-900);
+  }
+  .rosi-panel__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.75rem 0.75rem 1rem;
+    background: var(--color-ink-900);
+    color: #ffffff;
+    padding-top: max(0.75rem, env(safe-area-inset-top));
+  }
+  .rosi-status {
+    display: inline-flex;
+    margin-top: 0.25rem;
+    border-radius: 999px;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.7rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: #e3e3e3;
+  }
+  .rosi-head-btn {
+    min-height: 2.75rem;
+    padding: 0 0.5rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #ffffff;
+  }
+  .rosi-head-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .rosi-panel__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .rosi-messages {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .rosi-msg {
+    max-width: 88%;
+    padding: 0.625rem 0.875rem;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+  }
+  .rosi-msg--rosi {
+    align-self: flex-start;
+    background: #ffffff;
+    border: 1px solid var(--color-ink-200);
+  }
+  .rosi-msg--user {
+    align-self: flex-end;
+    background: var(--color-ink-900);
+    color: #ffffff;
+  }
+  .rosi-typing {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--color-ink-500);
+  }
+  .rosi-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .rosi-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.5rem 0.875rem;
+    border-radius: 999px;
+    border: 1px solid var(--color-ink-900);
+    background: #ffffff;
+    color: var(--color-ink-900);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: left;
+  }
+  .rosi-chip:hover {
+    background: var(--color-ink-900);
+    color: #ffffff;
+  }
+  .rosi-chip--primary {
+    background: var(--color-brand-500);
+    border-color: var(--color-brand-500);
+    color: var(--color-ink-900);
+  }
+  .rosi-chip--primary:hover {
+    background: var(--color-brand-600);
+    border-color: var(--color-brand-600);
+    color: var(--color-ink-900);
+  }
+  .rosi-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.875rem;
+    border-radius: 12px;
+    background: #ffffff;
+    border: 1px solid var(--color-ink-200);
+    font-size: 0.9rem;
+  }
+  .rosi-card dl {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .rosi-card dt {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-ink-500);
+  }
+  .rosi-card dd {
+    margin: 0;
+  }
+  .rosi-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+  .rosi-mini {
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 10px;
+    border: 1px solid var(--color-ink-300);
+    background: #ffffff;
+    font-weight: 700;
+  }
+  .rosi-mini:hover {
+    border-color: var(--color-ink-900);
+  }
+  .rosi-send-big {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 52px;
+    border-radius: 12px;
+    background: var(--color-brand-500);
+    color: var(--color-ink-900);
+    font-weight: 800;
+  }
+  .rosi-send-big:hover {
+    background: var(--color-brand-600);
+  }
+  .rosi-send-big[aria-disabled='true'] {
+    background: var(--color-ink-200);
+    color: var(--color-ink-500);
+    pointer-events: none;
+  }
+  .rosi-panel__foot {
+    padding: 0.75rem 1rem max(0.75rem, env(safe-area-inset-bottom));
+    border-top: 1px solid var(--color-ink-200);
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .rosi-form {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .rosi-input {
+    flex: 1;
+    min-height: 44px;
+    border-radius: 10px;
+    border: 1px solid var(--color-ink-300);
+    padding: 0 0.75rem;
+    font-size: 16px;
+    color: var(--color-ink-900);
+    background: #ffffff;
+  }
+  .rosi-send {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0 0.875rem;
+    border-radius: 10px;
+    background: var(--color-ink-900);
+    color: #ffffff;
+    font-weight: 700;
+  }
+  .rosi-whats {
+    align-self: center;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    color: var(--color-ink-900);
+  }
+  .rosi-messages li {
+    display: flex;
+    flex-direction: column;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rosi-launcher {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  // O botão só carrega a lógica da Rosi (rosi.client) no primeiro toque.
+  const root = document.querySelector<HTMLElement>('[data-rosi-root]');
+  const launcher = root?.querySelector<HTMLButtonElement>('[data-rosi-open]');
+  const balloon = root?.querySelector<HTMLElement>('[data-rosi-balloon]');
+  let api: { open: () => void; openWithEquipment: (id: string) => void } | undefined;
+
+  if (root && launcher) {
+    launcher.addEventListener('click', async () => {
+      if (!api) {
+        const mod = await import('./rosi.client');
+        api = mod.mountRosi(root);
+      }
+      api.open();
+    });
+  }
+
+  // Balão discreto, uma vez por sessão, depois de 15 s na página de equipamentos. Some em 8 s.
+  const showBalloonOnce = () => {
+    if (!balloon || !location.pathname.replace(/\/$/, '').endsWith('/equipamentos')) return;
+    if (sessionStorage.getItem('rosi-balloon')) return;
+    window.setTimeout(() => {
+      if (!balloon) return;
+      balloon.hidden = false;
+      sessionStorage.setItem('rosi-balloon', '1');
+      window.setTimeout(() => (balloon.hidden = true), 8000);
+    }, 15000);
+  };
+  balloon
+    ?.querySelector('[data-rosi-balloon-close]')
+    ?.addEventListener('click', () => (balloon.hidden = true));
+
+  // Botão "Adicionar ao pedido com a Rosi" nos detalhes de um equipamento.
+  document.addEventListener('click', async (event) => {
+    const target = (event.target as HTMLElement | null)?.closest<HTMLElement>('[data-rosi-add]');
+    if (!target || !root) return;
+    event.preventDefault();
+    const id = target.dataset.rosiAdd ?? '';
+    if (!api) {
+      const mod = await import('./rosi.client');
+      api = mod.mountRosi(root);
+    }
+    api.openWithEquipment(id);
+  });
+  document.addEventListener('astro:page-load', showBalloonOnce);
+  showBalloonOnce();
+</script>

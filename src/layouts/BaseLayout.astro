@@ -4,6 +4,7 @@ import { ClientRouter } from 'astro:transitions';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import MobileActionBar from '../components/MobileActionBar.astro';
+import RosiRoot from '../components/rosi/RosiRoot.astro';
 import Seo from '../components/Seo.astro';
 
 interface Props {
@@ -38,6 +39,7 @@ const { title, description, path = '/', mainStyle } = Astro.props;
     </main>
     <Footer />
     <MobileActionBar />
+    <RosiRoot />
     <script>
       import { initReveal } from '../lib/reveal';
 
