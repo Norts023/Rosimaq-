@@ -20,17 +20,20 @@ const openHour = Number(hours.open.split(':')[0]);
 const closeHour = Number(hours.close.split(':')[0]);
 ---
 
-<BaseLayout title={title} description={description} path="/contato">
-  <section class="bg-ink-900 pb-12 pt-14 text-white md:pt-20">
+<BaseLayout
+  title={title}
+  description={description}
+  path="/contato"
+  mainStyle="background: var(--gradient-page-light)"
+>
+  <section class="pb-12 pt-14 text-ink-900 md:pt-20">
     <div class="mx-auto max-w-[1200px] px-4 md:px-6">
-      <p class="text-[0.8125rem] font-semibold uppercase tracking-[.08em] text-brand-300">
-        Contato
-      </p>
+      <p class="text-[0.8125rem] font-semibold uppercase tracking-[.08em] text-ink-500">Contato</p>
       <!-- APROVAR TEXTO -->
       <h1 class="condensed mt-3 text-[clamp(2.25rem,5vw,4rem)] font-extrabold">
         Fale com a Rosimaq
       </h1>
-      <p class="mt-4 max-w-[65ch] text-lg text-ink-300">
+      <p class="mt-4 max-w-[65ch] text-lg text-ink-500">
         O jeito mais rápido é o WhatsApp. Diga o equipamento e o endereço da obra.
       </p>
       <div class="mt-8">
@@ -161,7 +164,7 @@ const closeHour = Number(hours.close.split(':')[0]);
     </div>
   </section>
 
-  <section class="bg-ink-100 py-[clamp(4rem,10vw,6rem)]" aria-labelledby="contato-regioes">
+  <section class="py-[clamp(4rem,10vw,6rem)]" aria-labelledby="contato-regioes">
     <div class="mx-auto max-w-[1200px] px-4 md:px-6">
       <h2 id="contato-regioes" class="condensed text-[clamp(1.75rem,3.5vw,2.75rem)] font-extrabold">
         Regiões atendidas
