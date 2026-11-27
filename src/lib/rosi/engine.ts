@@ -529,9 +529,19 @@ function handleOption(state: RosiState, id: string, ctx: RosiContext): RosiState
         return enter({ ...state, recommend: resolveTask(value, ctx) }, 'pick-equipment', ctx);
       break;
     case 'pick-category':
-      if (id === 'cat:all') return enter({ ...state, category: undefined }, 'pick-equipment', ctx);
+      // Escolher uma categoria substitui a recomendação anterior da tarefa.
+      if (id === 'cat:all')
+        return enter(
+          { ...state, category: undefined, recommend: undefined },
+          'pick-equipment',
+          ctx,
+        );
       if (head === 'cat')
-        return enter({ ...state, category: value as CategorySlug }, 'pick-equipment', ctx);
+        return enter(
+          { ...state, category: value as CategorySlug, recommend: undefined },
+          'pick-equipment',
+          ctx,
+        );
       break;
     case 'pick-equipment':
       if (head === 'eq') return enter({ ...state, pendingEquipment: value }, 'ask-quantity', ctx);
