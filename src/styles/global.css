@@ -239,3 +239,20 @@ body::before {
 .group:hover .glow-ring {
   box-shadow: 0 0 0 10px rgba(245, 184, 0, 0.12);
 }
+
+/* Home clara: holofote âmbar suave e destaque da palavra do título. */
+:root {
+  --gradient-spotlight-light: radial-gradient(
+    circle at var(--x, 70%) var(--y, 40%),
+    rgba(245, 184, 0, 0.18) 0%,
+    rgba(245, 184, 0, 0) 55%
+  );
+  --gradient-page-light: linear-gradient(180deg, #ffffff 0%, #fffbef 50%, #fff8db 100%);
+}
+.hero-accent {
+  background: var(--color-brand-500);
+  color: var(--color-ink-900);
+  padding: 0 0.12em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}

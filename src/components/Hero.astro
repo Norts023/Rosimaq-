@@ -41,23 +41,18 @@ const cards = [
   - "SUA OBRA NÃO PARA."
   - "LOCAÇÃO QUE CHEGA NA HORA." -->
 <section
-  class="relative isolate overflow-hidden bg-ink-900 text-white"
+  class="relative isolate overflow-hidden text-ink-900"
   data-hero
   aria-labelledby="hero-title"
 >
   <div
     class="pointer-events-none absolute inset-0 -z-10"
-    style="background: var(--gradient-spotlight), var(--color-ink-900);"
-    aria-hidden="true"
-  ></div>
-  <div
-    class="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-48"
-    style="background: linear-gradient(180deg, rgba(17,17,17,0) 0%, #111111 100%)"
+    style="background: var(--gradient-spotlight-light);"
     aria-hidden="true"
   ></div>
   <div class="mx-auto grid max-w-[1200px] items-center gap-12 px-4 pb-20 pt-16 md:grid-cols-[1.25fr_0.75fr] md:px-6 md:pb-28 md:pt-24">
     <div class="flex flex-col gap-7">
-      <p class="text-[0.8125rem] font-semibold uppercase tracking-[.08em] text-brand-300">
+      <p class="text-[0.8125rem] font-semibold uppercase tracking-[.08em] text-ink-500">
         Santana de Parnaíba e região
       </p>
       <h1
@@ -66,7 +61,7 @@ const cards = [
       >
         {titles.map((t, i) => (
           <span class:list={['hero-phrase', i === 0 && 'is-active']} data-phrase={i}>
-            {t.lead} <span class="text-brand-500">{t.accent}</span>
+            {t.lead} <span class="hero-accent">{t.accent}</span>
           </span>
         ))}
       </h1>
@@ -85,7 +80,7 @@ const cards = [
           ))}
         </div>
       </div>
-      <p class="max-w-[65ch] text-lg text-ink-300">
+      <p class="max-w-[65ch] text-lg text-ink-500">
         Locação de betoneira, martelete, andaime e mais equipamentos para a sua obra. Peça o
         orçamento em minutos pelo WhatsApp.
       </p>
@@ -93,7 +88,7 @@ const cards = [
         <Button href={whatsapp} icon="whatsapp" external>
           Pedir orçamento no WhatsApp
         </Button>
-        <Button href={withBase('/equipamentos')} variant="secondary" icon="arrow">
+        <Button href={withBase('/equipamentos')} variant="outline" icon="arrow">
           Ver equipamentos
         </Button>
       </div>
@@ -165,7 +160,7 @@ const cards = [
     width: 12px;
     height: 12px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(17, 17, 17, 0.2);
     transition:
       background 300ms ease,
       transform 300ms ease;

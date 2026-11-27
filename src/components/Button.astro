@@ -3,7 +3,7 @@ import Icon from './Icon.astro';
 
 interface Props {
   href: string;
-  variant?: 'primary' | 'secondary' | 'dark';
+  variant?: 'primary' | 'secondary' | 'dark' | 'outline';
   icon?: 'whatsapp' | 'phone' | 'arrow';
   external?: boolean;
   class?: string;
@@ -17,6 +17,7 @@ const variants = {
     'relative overflow-hidden sheen bg-brand-500 text-ink-900 hover:bg-[image:var(--gradient-industrial)] hover:shadow-[0_10px_24px_-12px_rgba(245,184,0,.7)]',
   secondary: 'border border-white/25 text-white hover:border-brand-500 hover:text-brand-300',
   dark: 'bg-ink-900 text-brand-300 hover:bg-ink-700',
+  outline: 'border border-ink-900 text-ink-900 hover:bg-ink-900 hover:text-white',
 };
 ---
 
