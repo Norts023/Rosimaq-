@@ -5,6 +5,7 @@ import Benefits from '../components/Benefits.astro';
 import CategoryBento from '../components/CategoryBento.astro';
 import CtaBanner from '../components/CtaBanner.astro';
 import FeaturedGrid from '../components/FeaturedGrid.astro';
+import Blend from '../components/Blend.astro';
 import Hero from '../components/Hero.astro';
 import HowItWorks from '../components/HowItWorks.astro';
 import Regions from '../components/Regions.astro';
@@ -48,10 +49,13 @@ const structuredData = {
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
   </Fragment>
   <Hero />
+  <Blend from="#111111" to="#FAFAF8" height="7rem" />
   <Benefits />
   <CategoryBento />
   <FeaturedGrid />
   <HowItWorks />
+  <Blend from="#FAFAF8" to="#111111" height="7rem" />
   <Regions />
+  <Blend from="#111111" to="#FAFAF8" height="7rem" />
   <CtaBanner />
 </BaseLayout>

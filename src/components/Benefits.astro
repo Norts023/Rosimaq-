@@ -25,11 +25,11 @@ const items = [
 ];
 ---
 
-<section class="border-b border-ink-200 bg-white" aria-label="Diferenciais">
+<section class="bg-gradient-to-b from-white via-ink-50 to-ink-50" aria-label="Diferenciais">
   <ul class="mx-auto grid max-w-[1200px] gap-6 px-4 py-10 sm:grid-cols-2 md:grid-cols-4 md:px-6">
     {items.map((item) => (
-      <li class="flex gap-4" data-reveal>
-        <span class="inline-flex size-12 shrink-0 items-center justify-center rounded-[12px] bg-brand-50 text-ink-900">
+      <li class="group flex gap-4" data-reveal>
+        <span class="inline-flex size-12 shrink-0 items-center justify-center rounded-[12px] bg-gradient-to-br from-brand-50 to-brand-300/60 text-ink-900 shadow-[0_8px_20px_-12px_rgba(245,184,0,.8)] transition duration-300 group-hover:-rotate-6 group-hover:scale-110 group-hover:shadow-[0_12px_28px_-10px_rgba(245,184,0,.9)]">
           <Icon name={item.icon} class="size-6" />
         </span>
         <div>

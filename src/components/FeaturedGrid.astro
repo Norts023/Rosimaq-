@@ -4,7 +4,11 @@ import { featuredEquipment } from '../data/equipment';
 import EquipmentCard from './EquipmentCard.astro';
 ---
 
-<section class="bg-ink-50 py-[clamp(4rem,10vw,8rem)]" aria-labelledby="destaques-title">
+<section
+  class="py-[clamp(4rem,10vw,8rem)]"
+  style="background: radial-gradient(circle at 0% 100%, rgba(245,184,0,.12), transparent 40%), #FAFAF8"
+  aria-labelledby="destaques-title"
+>
   <div class="mx-auto max-w-[1200px] px-4 md:px-6">
     <div class="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
       <div class="flex flex-col gap-3">

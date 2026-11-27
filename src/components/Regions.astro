@@ -5,7 +5,8 @@ import Button from './Button.astro';
 ---
 
 <section
-  class="bg-gradient-to-b from-ink-700 to-ink-900 py-[clamp(4rem,10vw,8rem)] text-white"
+  class="aurora py-[clamp(4rem,10vw,8rem)] text-white"
+  style="background-color: #111111; background-image: radial-gradient(circle at 10% 0%, rgba(245,184,0,.18), transparent 42%), linear-gradient(180deg, #2B2B2B 0%, #111111 100%)"
   aria-labelledby="regioes-title"
 >
   <div class="mx-auto grid max-w-[1200px] gap-10 px-4 md:grid-cols-[1fr_1.2fr] md:px-6">
@@ -31,7 +32,7 @@ import Button from './Button.astro';
     </div>
     <ul class="flex flex-wrap content-start gap-3" aria-label="Municípios atendidos">
       {company.serviceArea.map((city) => (
-        <li class="rounded-[999px] border border-white/15 bg-white/5 px-5 py-3 text-lg font-bold text-white">
+        <li class="cursor-default rounded-[999px] border border-white/15 bg-white/5 px-5 py-3 text-lg font-bold text-white transition duration-300 hover:-translate-y-1 hover:border-brand-500 hover:bg-brand-500 hover:text-ink-900 hover:shadow-[0_10px_24px_-12px_rgba(245,184,0,.8)]">
           {city}
         </li>
       ))}
