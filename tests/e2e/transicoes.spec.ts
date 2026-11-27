@@ -28,7 +28,7 @@ test('cabeçalho continua funcional depois da navegação', async ({ page }) => 
   await page.goto('/');
   await page.getByRole('link', { name: 'Ver equipamentos' }).click();
   await expect(page).toHaveURL(/\/equipamentos$/);
-  await expect(page.locator('header')).toBeVisible();
+  await expect(page.locator('header.sticky')).toBeVisible();
   await expect(page.getByRole('link', { name: 'Rosimaq, página inicial' }).first()).toBeVisible();
   // O cabeçalho é recriado a cada página; o script do menu precisa estar ativo.
   await expect(page.locator('header [data-menu-open]')).toBeAttached();

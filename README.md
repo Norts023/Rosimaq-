@@ -151,6 +151,31 @@ tests/
   e2e/             Playwright
 ```
 
+## Como editar a Rosi
+
+A Rosi é a assistente de pré-atendimento do site. Ela funciona com botões e uma busca simples por palavras-chave, tudo no navegador: não usa IA e não envia nada até a pessoa tocar em enviar no WhatsApp.
+
+**Onde ficam os textos:** tudo o que a Rosi fala, os nomes dos botões e as palavras que ela entende ficam em um único arquivo, `src/data/rosi.ts`. As regras de conversa e a lógica não precisam ser mexidas para trocar textos.
+
+**Como trocar uma fala ou um botão:** edite o texto entre aspas no arquivo. Os nomes entre chaves, como `{nome}`, são preenchidos pelo site; não os apague.
+
+**Como incluir uma pergunta frequente:**
+
+1. Adicione um item em `faqTopics`, com um `id` novo e o rótulo do botão.
+2. Adicione a resposta em `faqAnswers` ou inclua o tratamento em `faqAnswer` (`src/lib/rosi/engine.ts`), sempre com dados de `company.ts` ou `equipment.ts`.
+3. Adicione os termos que o visitante pode digitar em `synonyms`, sem acento e em minúsculas.
+
+**Como adicionar sinônimos:** cada intenção em `synonyms` é uma lista de palavras ou expressões. Quem digita "britadeira" encontra o martelete rompedor porque `britadeira` está em `equipmentSynonyms`.
+
+**Como testar depois de editar:**
+
+```bash
+pnpm test        # testes unitários: fluxo, busca, mensagem do WhatsApp
+pnpm test:e2e    # testes de navegador: pedido completo, perguntas, teclado e acessibilidade
+```
+
+**Regras que não devem ser quebradas:** nunca colocar preço, prazo ou disponibilidade nos textos; a Rosi só responde o que está nos dados do site e encaminha o resto para a equipe.
+
 ## Integração contínua
 
 O workflow `.github/workflows/ci.yml` roda em cada pull request e em pushes para `main`:
