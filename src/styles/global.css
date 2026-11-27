@@ -23,7 +23,7 @@
   --gradient-night: linear-gradient(180deg, #2b2b2b 0%, #111111 100%);
   --gradient-spotlight: radial-gradient(
     circle at var(--x, 70%) var(--y, 40%),
-    rgba(245, 184, 0, 0.28) 0%,
+    rgba(245, 184, 0, 0.16) 0%,
     rgba(245, 184, 0, 0) 55%
   );
 
