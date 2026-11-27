@@ -6,6 +6,12 @@ import { buildWhatsAppLink, GENERAL_MESSAGE } from '../lib/whatsapp';
 import Button from './Button.astro';
 
 const whatsapp = buildWhatsAppLink(GENERAL_MESSAGE);
+// Títulos aprovados para o topo. Cada um tem a parte branca e a parte amarela.
+const titles = [
+  { lead: 'Equipamento certo.', accent: 'Obra andando.' },
+  { lead: 'Sua obra', accent: 'não para.' },
+  { lead: 'Locação que', accent: 'chega na hora.' },
+];
 const cards = [
   {
     file: '01_Betoneira_Menegotti_Prime_400L_220V.jpg',
@@ -53,14 +59,35 @@ const cards = [
         id="hero-title"
         class="condensed text-[clamp(2.75rem,8vw,7rem)] font-black leading-[.92] tracking-[-0.01em]"
       >
-        {['Equipamento', 'certo.', 'Obra', 'andando.'].map((word, i) => (
-          <>
-            <span class="hero-word inline-block" style={`animation-delay:${i * 90}ms`}>
-              {i === 3 ? <span class="text-brand-500">{word}</span> : word}
-            </span>{' '}
-          </>
+        {titles.map((t, i) => (
+          <span class="hero-phrase" data-phrase={i} hidden={i !== 0}>
+            {t.lead} <span class="text-brand-500">{t.accent}</span>
+          </span>
         ))}
       </h1>
+      <div class="hero-controls flex items-center gap-4" hidden>
+        <div class="flex gap-2" role="group" aria-label="Escolher o título do topo">
+          {titles.map((t, i) => (
+            <button
+              type="button"
+              class="hero-dot size-11 inline-flex items-center justify-center rounded-full"
+              data-dot={i}
+              aria-pressed={i === 0 ? 'true' : 'false'}
+              aria-label={`Mostrar título ${i + 1}: ${t.lead} ${t.accent}`}
+            >
+              <span class="hero-dot__mark" aria-hidden="true"></span>
+            </button>
+          ))}
+        </div>
+        <button
+          type="button"
+          class="hero-pause text-sm font-semibold text-ink-300 underline underline-offset-4 hover:text-white"
+          data-pause
+          aria-pressed="false"
+        >
+          Pausar títulos
+        </button>
+      </div>
       <p class="max-w-[65ch] text-lg text-ink-300">
         Locação de betoneira, martelete, andaime e mais equipamentos para a sua obra. Peça o
         orçamento em minutos pelo WhatsApp.
@@ -123,10 +150,35 @@ const cards = [
         rotate(var(--rot));
     }
   }
-  .hero-word {
-    opacity: 0;
-    transform: translateY(0.4em);
-    animation: word-in 330ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+  .hero-phrase:not([hidden]) {
+    display: inline;
+    animation: phrase-in 600ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .hero-phrase[hidden] {
+    display: none;
+  }
+  .hero-dot__mark {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.3);
+    transition:
+      background 300ms ease,
+      transform 300ms ease;
+  }
+  .hero-dot[aria-pressed='true'] .hero-dot__mark {
+    background: var(--color-brand-500);
+    transform: scale(1.25);
+  }
+  @keyframes phrase-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.35em);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
   }
   @keyframes word-in {
     to {
@@ -134,16 +186,8 @@ const cards = [
       transform: none;
     }
   }
-  /* Sem animação para quem prefere movimento reduzido. */
-  .intro-done .hero-word {
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
   @media (prefers-reduced-motion: reduce) {
-    .hero-word {
-      opacity: 1;
-      transform: none;
+    .hero-phrase:not([hidden]) {
       animation: none;
     }
   }
@@ -151,7 +195,75 @@ const cards = [
 
 <script>
   import { initSpotlight } from '../lib/spotlight';
-  document
-    .querySelectorAll<HTMLElement>('[data-hero]')
-    .forEach((section) => initSpotlight(section));
+
+  const INTERVAL_MS = 6000;
+  let timer: number | undefined;
+
+  function initRotator(section: HTMLElement): void {
+    const phrases = Array.from(section.querySelectorAll<HTMLElement>('.hero-phrase'));
+    const dots = Array.from(section.querySelectorAll<HTMLButtonElement>('[data-dot]'));
+    const controls = section.querySelector<HTMLElement>('.hero-controls');
+    const pause = section.querySelector<HTMLButtonElement>('[data-pause]');
+    if (phrases.length < 2 || !controls || !pause) return;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let index = 0;
+    let paused = reduce;
+    let hovering = false;
+
+    const show = (next: number) => {
+      index = next;
+      phrases.forEach((el, i) => {
+        el.hidden = i !== index;
+      });
+      dots.forEach((dot, i) => dot.setAttribute('aria-pressed', String(i === index)));
+    };
+
+    const setPaused = (value: boolean) => {
+      paused = value;
+      pause.setAttribute('aria-pressed', String(value));
+      pause.textContent = value ? 'Continuar títulos' : 'Pausar títulos';
+    };
+
+    // Sem JavaScript os controles ficam ocultos; com JavaScript aparecem.
+    controls.hidden = false;
+    if (reduce) {
+      pause.hidden = true;
+    }
+    setPaused(paused);
+
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        show(Number(dot.dataset.dot));
+      });
+    });
+
+    pause.addEventListener('click', () => setPaused(!paused));
+
+    section.addEventListener('pointerenter', () => {
+      hovering = true;
+    });
+    section.addEventListener('pointerleave', () => {
+      hovering = false;
+    });
+
+    // Um único temporizador por vez: a navegação recria o hero.
+    if (timer !== undefined) window.clearInterval(timer);
+    timer = window.setInterval(() => {
+      if (paused || hovering) return;
+      show((index + 1) % phrases.length);
+    }, INTERVAL_MS);
+  }
+
+  // Reinicia a cada página (View Transitions), sem duplicar listeners.
+  function initHero(): void {
+    document.querySelectorAll<HTMLElement>('[data-hero]').forEach((section) => {
+      if (section.dataset.ready === 'on') return;
+      section.dataset.ready = 'on';
+      initSpotlight(section);
+      initRotator(section);
+    });
+  }
+  document.addEventListener('astro:page-load', initHero);
+  initHero();
 </script>
