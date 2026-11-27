@@ -86,8 +86,8 @@ const cards = [
           style={`--float-delay:-${i * 2.2}s;z-index:${i === 1 ? 3 : 2}`}
         >
           <figure
-            class="absolute left-1/2 top-1/2 w-[52%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[12px] bg-white shadow-[0_30px_60px_-30px_rgba(0,0,0,.6)]"
-            style={`transform: translate(calc(-50% + ${(i - 1) * 24}%), calc(-50% + ${(i === 1 ? -6 : 4) * card.depth}%)) rotate(${card.rotate}); z-index: ${i === 1 ? 3 : 2}`}
+            class="hero-card absolute left-1/2 top-1/2 overflow-hidden rounded-[12px] bg-white shadow-[0_30px_60px_-30px_rgba(0,0,0,.6)]"
+            style={`--dx:${i - 1};--dy:${(i === 1 ? -6 : 4) * card.depth};--rot:${card.rotate};z-index: ${i === 1 ? 3 : 2}`}
           >
             <Picture
               src={photoFor(card.file)}
@@ -110,6 +110,19 @@ const cards = [
 </section>
 
 <style>
+  /* Cards do hero: deslocamento lateral menor no celular para não sair da tela. */
+  .hero-card {
+    width: 46%;
+    transform: translate(calc(-50% + var(--dx) * 16%), calc(-50% + var(--dy) * 1%))
+      rotate(var(--rot));
+  }
+  @media (min-width: 768px) {
+    .hero-card {
+      width: 52%;
+      transform: translate(calc(-50% + var(--dx) * 24%), calc(-50% + var(--dy) * 1%))
+        rotate(var(--rot));
+    }
+  }
   .hero-word {
     opacity: 0;
     transform: translateY(0.4em);
